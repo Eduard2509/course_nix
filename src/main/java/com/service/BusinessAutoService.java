@@ -36,12 +36,20 @@ public class BusinessAutoService {
         return result;
     }
 
-    public void deleteBusinessAuto (List<BusinessAuto> businessAutos, int index) {
-        for (int i = 0; i < businessAutos.size(); i++) {
-            if (i == index) {
-                businessAutos.remove(index);
-            }
+    public void updateBusinessAuto(BusinessAuto businessAuto) {
+        BUSINESS_AUTO_REPOSITORY.update(businessAuto);
     }
+
+    public void updateBusinessAuto(String id, BigDecimal price) {
+        BusinessAuto businessAuto = BUSINESS_AUTO_REPOSITORY.getById(id);
+        if(businessAuto == null) return;
+        businessAuto.setPrice(price);
+        BUSINESS_AUTO_REPOSITORY.update(businessAuto);
+    }
+
+    public void deleteBusinessAuto(String id) {
+        BUSINESS_AUTO_REPOSITORY.delete(id);
+        LOGGER.debug("Deleted auto {}", id);
     }
 
     private Manufacturer getRandomManufacturer() {

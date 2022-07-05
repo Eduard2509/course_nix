@@ -24,6 +24,8 @@ public class BusinessAutoRepository {
         return null;
     }
 
+
+
     public List<BusinessAuto> getAll() {
         return businessAutos;
     }

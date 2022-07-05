@@ -5,7 +5,6 @@ import com.model.Manufacturer;
 import com.repository.AutoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,6 +29,22 @@ public class AutoService {
             LOGGER.debug("Created auto {}", auto.getId());
         }
         return result;
+    }
+
+    public void deleteAuto(String id) {
+        AUTO_REPOSITORY.delete(id);
+        LOGGER.debug("Deleted auto {}", id);
+        }
+
+    public void updateAuto(Auto auto) {
+        AUTO_REPOSITORY.update(auto);
+    }
+
+    public void updateAuto(String id, BigDecimal price) {
+       Auto auto = AUTO_REPOSITORY.getById(id);
+       if (auto == null) return;
+       auto.setPrice(price);
+       AUTO_REPOSITORY.update(auto);
     }
 
     private Manufacturer getRandomManufacturer() {

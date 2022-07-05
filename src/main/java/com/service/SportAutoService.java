@@ -3,8 +3,8 @@ package com.service;
 import com.model.Manufacturer;
 import com.model.SportAuto;
 import com.repository.SportAutoRepository;
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -28,10 +28,26 @@ public class SportAutoService {
                     280
             );
             result.add(sportAuto);
-        //    LOGGER.debug("Created auto {}", sportAuto.getId());
+            LOGGER.debug("Created auto {}", sportAuto.getId());
 
         }
             return result;
+    }
+
+    public void updateSportAuto(SportAuto sportAuto) {
+        SPORT_AUTO_REPOSITORY.update(sportAuto);
+    }
+
+    public void updateSportAuto(String id, BigDecimal price) {
+        SportAuto sportAuto = SPORT_AUTO_REPOSITORY.getById(id);
+        if (sportAuto == null) return;
+        sportAuto.setPrice(price);
+        SPORT_AUTO_REPOSITORY.update(sportAuto);
+    }
+
+    public void deleteSportAuto(String id) {
+        SPORT_AUTO_REPOSITORY.delete(id);
+        LOGGER.debug("Deleted auto {}", id);
     }
 
     public void saveSportAuto(List<SportAuto> sportAutos) {
