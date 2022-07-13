@@ -1,6 +1,9 @@
 package com.service;
 
 import com.model.*;
+import com.repository.AutoRepository;
+import com.repository.BusinessAutoRepository;
+import com.repository.SportAutoRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,9 +12,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class ProgramRun {
-    private static final AutoService AUTO_SERVICE = new AutoService();
-    private static final SportAutoService SPORT_AUTO_SERVICE = new SportAutoService();
-    private static final BusinessAutoService BUSINESS_AUTO_SERVICE = new BusinessAutoService();
+    private static final AutoService AUTO_SERVICE = new AutoService(new AutoRepository());
+    private static final SportAutoService SPORT_AUTO_SERVICE = new SportAutoService(new SportAutoRepository());
+    private static final BusinessAutoService BUSINESS_AUTO_SERVICE = new BusinessAutoService(new BusinessAutoRepository());
 
     public void go() {
         System.out.println("Welcome in my project");
@@ -33,17 +36,17 @@ public class ProgramRun {
         String line = reader.readLine();
         switch (line) {
             case "1" -> {
-                final List<Auto> autos = AUTO_SERVICE.createAutos(5);
+                final List<Auto> autos = AUTO_SERVICE.createAndSaveAutos(5);
                 AUTO_SERVICE.saveAutos(autos);
                 AUTO_SERVICE.printAll();
             }
             case "2" -> {
-                final List<BusinessAuto> autos1 = BUSINESS_AUTO_SERVICE.createBusinessAutos(5);
+                final List<BusinessAuto> autos1 = BUSINESS_AUTO_SERVICE.createAndSaveBusinessAutos(5);
                 BUSINESS_AUTO_SERVICE.saveBusinessAutos(autos1);
                 BUSINESS_AUTO_SERVICE.printAll();
             }
             case "3" -> {
-                final List<SportAuto> autos2 = SPORT_AUTO_SERVICE.createSportAutos(5);
+                final List<SportAuto> autos2 = SPORT_AUTO_SERVICE.createAndSaveSportAutos(5);
                 SPORT_AUTO_SERVICE.saveSportAuto(autos2);
                 SPORT_AUTO_SERVICE.printAll();
             }
@@ -52,7 +55,7 @@ public class ProgramRun {
                 String idAuto = reader.readLine();
                 System.out.println("Please enter price: ");
                 BigDecimal priceAuto = new BigDecimal(reader.readLine());
-                AUTO_SERVICE.updateAuto(idAuto, priceAuto);
+                AUTO_SERVICE.updateAutoByPrice(idAuto, priceAuto);
                 AUTO_SERVICE.printAll();
             }
 
@@ -61,7 +64,7 @@ public class ProgramRun {
                 String idBusinessAuto = reader.readLine();
                 System.out.println("Please enter price: ");
                 BigDecimal priceBusinessAuto = new BigDecimal(reader.readLine());
-                BUSINESS_AUTO_SERVICE.updateBusinessAuto(idBusinessAuto, priceBusinessAuto);
+                BUSINESS_AUTO_SERVICE.updateBusinessAutoByPrice(idBusinessAuto, priceBusinessAuto);
                 BUSINESS_AUTO_SERVICE.printAll();
             }
 
@@ -70,14 +73,14 @@ public class ProgramRun {
                 String idSportAuto = reader.readLine();
                 System.out.println("Please enter price: ");
                 BigDecimal priceSportAuto = new BigDecimal(reader.readLine());
-                SPORT_AUTO_SERVICE.updateSportAuto(idSportAuto, priceSportAuto);
+                SPORT_AUTO_SERVICE.updateSportAutoByPrice(idSportAuto, priceSportAuto);
                 SPORT_AUTO_SERVICE.printAll();
             }
 
             case "7" -> {
                 System.out.println("Please enter car's id");
                 String idCar = reader.readLine();
-                AUTO_SERVICE.deleteAuto(idCar);
+                AUTO_SERVICE.delete(idCar);
                 AUTO_SERVICE.printAll();
             }
             case "8" -> {
