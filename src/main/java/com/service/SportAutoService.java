@@ -1,5 +1,6 @@
 package com.service;
 
+import com.model.BusinessAuto;
 import com.model.Manufacturer;
 import com.model.SportAuto;
 import com.repository.SportAutoRepository;
@@ -13,11 +14,15 @@ import java.util.Random;
 
 public class SportAutoService {
 
-    private static final SportAutoRepository SPORT_AUTO_REPOSITORY = new SportAutoRepository();
+    private final SportAutoRepository sportAutoRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(SportAutoService.class);
     private static final Random RANDOM = new Random();
 
-    public List<SportAuto> createSportAutos(int count) {
+    public SportAutoService(SportAutoRepository sportAutoRepository) {
+        this.sportAutoRepository = sportAutoRepository;
+    }
+
+    public List<SportAuto> createAndSaveSportAutos(int count) {
         List<SportAuto> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             final SportAuto sportAuto = new SportAuto(
@@ -28,6 +33,7 @@ public class SportAutoService {
                     280
             );
             result.add(sportAuto);
+            sportAutoRepository.save(sportAuto);
             LOGGER.debug("Created auto {}", sportAuto.getId());
 
         }
@@ -35,28 +41,37 @@ public class SportAutoService {
     }
 
     public void updateSportAuto(SportAuto sportAuto) {
-        SPORT_AUTO_REPOSITORY.update(sportAuto);
+        sportAutoRepository.check(sportAuto);
+        sportAutoRepository.update(sportAuto);
     }
 
-    public void updateSportAuto(String id, BigDecimal price) {
-        SportAuto sportAuto = SPORT_AUTO_REPOSITORY.getById(id);
+    public void updateSportAutoByPrice(String id, BigDecimal price) {
+        SportAuto sportAuto = sportAutoRepository.getById(id);
         if (sportAuto == null) return;
         sportAuto.setPrice(price);
-        SPORT_AUTO_REPOSITORY.update(sportAuto);
+        sportAutoRepository.update(sportAuto);
     }
 
     public void deleteSportAuto(String id) {
-        SPORT_AUTO_REPOSITORY.delete(id);
+        sportAutoRepository.delete(id);
         LOGGER.debug("Deleted auto {}", id);
     }
 
     public void saveSportAuto(List<SportAuto> sportAutos) {
-        SPORT_AUTO_REPOSITORY.create(sportAutos);
+        sportAutoRepository.saveAll(sportAutos);
     }
 
     public void printAll() {
-        for (SportAuto sportAuto: SPORT_AUTO_REPOSITORY.getAll()) {
+        for (SportAuto sportAuto: sportAutoRepository.getAll()) {
             System.out.println(sportAuto);
+        }
+    }
+
+    public SportAuto findOneById(String id) {
+        if (id == null) {
+            return sportAutoRepository.getById("");
+        } else {
+            return sportAutoRepository.getById(id);
         }
     }
 }

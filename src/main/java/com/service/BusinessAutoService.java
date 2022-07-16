@@ -15,11 +15,15 @@ import java.util.Random;
 
 public class BusinessAutoService {
 
-    private static final BusinessAutoRepository BUSINESS_AUTO_REPOSITORY = new BusinessAutoRepository();
+    private final BusinessAutoRepository businessAutoRepository;
     private static final Random RANDOM = new Random();
     private static final Logger LOGGER = LoggerFactory.getLogger(BusinessAutoService.class);
 
-    public List<BusinessAuto> createBusinessAutos (int count) {
+    public BusinessAutoService(BusinessAutoRepository businessAutoRepository) {
+        this.businessAutoRepository = businessAutoRepository;
+    }
+
+    public List<BusinessAuto> createAndSaveBusinessAutos (int count) {
         List<BusinessAuto> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             final BusinessAuto businessAuto = new BusinessAuto(
@@ -30,6 +34,7 @@ public class BusinessAutoService {
                     getRandomBusinessClassAuto()
             );
             result.add(businessAuto);
+            businessAutoRepository.save(businessAuto);
             LOGGER.debug("Created auto {}", businessAuto.getId());
 
         }
@@ -37,18 +42,19 @@ public class BusinessAutoService {
     }
 
     public void updateBusinessAuto(BusinessAuto businessAuto) {
-        BUSINESS_AUTO_REPOSITORY.update(businessAuto);
+        businessAutoRepository.update(businessAuto);
     }
 
-    public void updateBusinessAuto(String id, BigDecimal price) {
-        BusinessAuto businessAuto = BUSINESS_AUTO_REPOSITORY.getById(id);
+    public void updateBusinessAutoByPrice(String id, BigDecimal price) {
+        BusinessAuto businessAuto = businessAutoRepository.getById(id);
         if(businessAuto == null) return;
         businessAuto.setPrice(price);
-        BUSINESS_AUTO_REPOSITORY.update(businessAuto);
+        businessAutoRepository.update(businessAuto);
     }
 
+
     public void deleteBusinessAuto(String id) {
-        BUSINESS_AUTO_REPOSITORY.delete(id);
+        businessAutoRepository.delete(id);
         LOGGER.debug("Deleted auto {}", id);
     }
 
@@ -65,12 +71,20 @@ public class BusinessAutoService {
     }
 
     public void saveBusinessAutos(List<BusinessAuto> businessAutos) {
-        BUSINESS_AUTO_REPOSITORY.create(businessAutos);
+        businessAutoRepository.saveAll(businessAutos);
     }
 
     public void printAll() {
-        for (BusinessAuto businessAuto: BUSINESS_AUTO_REPOSITORY.getAll()) {
+        for (BusinessAuto businessAuto: businessAutoRepository.getAll()) {
             System.out.println(businessAuto);
+        }
+    }
+
+    public BusinessAuto findOneById(String id) {
+        if (id == null) {
+            return businessAutoRepository.getById("");
+        } else {
+            return businessAutoRepository.getById(id);
         }
     }
 }

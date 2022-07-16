@@ -3,6 +3,7 @@ package com.repository;
 import com.model.Auto;
 import com.model.BusinessAuto;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,18 +25,25 @@ public class BusinessAutoRepository {
         return null;
     }
 
-
-
     public List<BusinessAuto> getAll() {
         return businessAutos;
     }
 
-    public boolean create(BusinessAuto businessAuto) {
+    public boolean save(BusinessAuto businessAuto) {
+        if (businessAuto == null) {
+            throw new IllegalArgumentException("Auto must not be null");
+        }
+        if (businessAuto.getPrice().equals(BigDecimal.ZERO)) {
+            businessAuto.setPrice(BigDecimal.valueOf(-1));
+        }
         businessAutos.add(businessAuto);
         return true;
     }
 
-    public boolean create(List<BusinessAuto> businessAuto) {
+    public boolean saveAll(List<BusinessAuto> businessAuto) {
+        if (businessAuto == null) {
+            return false;
+        }
         return businessAutos.addAll(businessAuto);
     }
 
@@ -47,6 +55,16 @@ public class BusinessAutoRepository {
         }
         return false;
     }
+
+    public boolean updateByBodyType(String bodyType, BusinessAuto copyFrom) {
+        for (BusinessAuto auto : businessAutos) {
+            if (auto.getBodyType().equals(bodyType)) {
+                BusinessAutoRepository.BusinessAutoCopy.copy(copyFrom, auto);
+            }
+        }
+        return true;
+    }
+
 
     public boolean delete(String id) {
         final Iterator<BusinessAuto> iterator = businessAutos.iterator();
