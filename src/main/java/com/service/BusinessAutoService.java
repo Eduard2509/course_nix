@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class BusinessAutoService {
@@ -23,7 +23,8 @@ public class BusinessAutoService {
         this.businessAutoRepository = businessAutoRepository;
     }
 
-    public List<BusinessAuto> createAndSaveBusinessAutos (int count) {
+
+    public List<BusinessAuto> createAndSaveBusinessAutos(int count) {
         List<BusinessAuto> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             final BusinessAuto businessAuto = new BusinessAuto(
@@ -45,9 +46,35 @@ public class BusinessAutoService {
         businessAutoRepository.update(businessAuto);
     }
 
+    public Manufacturer findManufacturerBusinessAuto(String id) {
+        StringBuilder sb = new StringBuilder();
+        businessAutoRepository.findById(id)
+                .map(businessAuto -> businessAuto.getManufacturer())
+                .ifPresent(manufacturer -> sb.append(manufacturer));
+        if (sb.isEmpty()) {
+            return Manufacturer.NON;
+        }
+        return Manufacturer.valueOf(sb.toString());
+    }
+
+    public BusinessClassAuto findByBusinessClassAuto(BusinessClassAuto businessClassAuto) {
+        Optional<BusinessAuto> businessAuto = businessAutoRepository
+                .findByBusinessClass(businessClassAuto)
+                .or(() -> Optional.of(BusinessAutoUtil.SIMPLE_BUSINESS_AUTO));
+        return businessAuto.get().getBusinessClassAuto();
+    }
+
+    public BusinessAuto findBusinessAuto(String id) {
+        BusinessAuto businessAuto = businessAutoRepository.findById(id)
+                .orElse(BusinessAutoUtil.SIMPLE_BUSINESS_AUTO);
+        System.out.println(businessAuto);
+        return businessAuto;
+    }
+
+
     public void updateBusinessAutoByPrice(String id, BigDecimal price) {
         BusinessAuto businessAuto = businessAutoRepository.getById(id);
-        if(businessAuto == null) return;
+        if (businessAuto == null) return;
         businessAuto.setPrice(price);
         businessAutoRepository.update(businessAuto);
     }
@@ -64,7 +91,7 @@ public class BusinessAutoService {
         return values[index];
     }
 
-    private BusinessClassAuto getRandomBusinessClassAuto(){
+    private BusinessClassAuto getRandomBusinessClassAuto() {
         final BusinessClassAuto[] businessClass = BusinessClassAuto.values();
         final int num = RANDOM.nextInt(businessClass.length);
         return businessClass[num];
@@ -75,7 +102,7 @@ public class BusinessAutoService {
     }
 
     public void printAll() {
-        for (BusinessAuto businessAuto: businessAutoRepository.getAll()) {
+        for (BusinessAuto businessAuto : businessAutoRepository.getAll()) {
             System.out.println(businessAuto);
         }
     }

@@ -5,10 +5,12 @@ import com.model.Manufacturer;
 import com.repository.AutoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AutoService {
 
@@ -52,6 +54,28 @@ public class AutoService {
         }
     }
 
+    public void findAutoPrice(String id) {
+        Auto aThrow = autoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(
+                "Auto with id " + id + " is missing"));
+        System.out.println(aThrow.getPrice());
+    }
+
+    public Auto findAutoBodyType(String id) {
+        AtomicReference<Auto> atomicReference = new AtomicReference<>();
+        autoRepository.findById(id).ifPresent(auto -> {
+            System.out.println(auto.getBodyType());
+            atomicReference.set(auto);
+        });
+        return atomicReference.get();
+    }
+
+    public Auto createAutoWithoutId(String id) {
+        Auto auto = autoRepository.findById(id).orElseGet(() -> createOne());
+        System.out.println(auto.getId());
+        return auto;
+    }
+
+
     public Auto findOneById(String id) {
         if (id == null) {
             return autoRepository.getById("");
@@ -74,7 +98,15 @@ public class AutoService {
         if (auto == null) return;
         auto.setPrice(price);
         autoRepository.update(auto);
-}
+    }
 
+    private Auto createOne() {
+        return new Auto(
+                "Model new",
+                getRandomManufacturer(),
+                BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
+                "Model-" + RANDOM.nextInt(1000)
+        );
+    }
 
 }

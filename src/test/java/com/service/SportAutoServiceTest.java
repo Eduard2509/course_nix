@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -112,5 +113,39 @@ class SportAutoServiceTest {
         verify(sportAutoRepository).delete("");
     }
 
+    @Test
+    void findSportAuto_success() {
+        final SportAuto sportAuto = createSimpleAuto();
+        String id = sportAuto.getId();
+        Mockito.when(sportAutoRepository.findById(id)).thenReturn(Optional.of(sportAuto));
+        int maxSpeed = target.findSportAuto(id);
+        verify(sportAutoRepository).findById(id);
+        Assertions.assertEquals(sportAuto.getMaxSpeed(), maxSpeed);
+    }
+
+    @Test
+    void findSportAuto_fail() {
+        String id = "";
+        Mockito.when(sportAutoRepository.findById(id)).thenReturn(Optional.empty());
+        int maxSpeed = target.findSportAuto(id);
+        Assertions.assertEquals(0, maxSpeed);
+    }
+
+    @Test
+    void findSportAutosByBodyType_success() {
+        final SportAuto sportAuto = createSimpleAuto();
+        String type = sportAuto.getBodyType();
+        Mockito.when(sportAutoRepository.findByBodyType(type)).thenReturn(Optional.of(sportAuto));
+        target.findSportAutosByBodyType(type);
+        Mockito.verify(sportAutoRepository).update(Mockito.any());
+        Mockito.verify(sportAutoRepository).findByBodyType(type);
+    }
+
+    @Test
+    void findSportAutosByBodyType_fail() {
+        String bodyType = "Type";
+        Mockito.when(sportAutoRepository.findByBodyType(bodyType)).thenReturn(Optional.empty());
+        Mockito.verify(sportAutoRepository, Mockito.never()).update(Mockito.any());
+    }
 
 }

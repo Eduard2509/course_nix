@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class BusinessAuto extends Auto{
+public class BusinessAuto extends Auto {
 
     private BusinessClassAuto businessClassAuto;
 

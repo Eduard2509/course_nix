@@ -1,12 +1,13 @@
 package com.repository;
 
-import com.model.Auto;
 import com.model.BusinessAuto;
+import com.model.BusinessClassAuto;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class BusinessAutoRepository {
 
@@ -40,6 +41,25 @@ public class BusinessAutoRepository {
         return true;
     }
 
+
+    public Optional<BusinessAuto> findById(String id) {
+        for (BusinessAuto businessAuto : businessAutos) {
+            if (businessAuto.getId().equals(id)) {
+                return Optional.of(businessAuto);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<BusinessAuto> findByBusinessClass(BusinessClassAuto businessClassAuto) {
+        for (BusinessAuto businessAuto : businessAutos) {
+            if (businessAuto.getBusinessClassAuto().equals(businessClassAuto)) {
+                return Optional.of(businessAuto);
+            }
+        }
+        return Optional.empty();
+    }
+
     public boolean saveAll(List<BusinessAuto> businessAuto) {
         if (businessAuto == null) {
             return false;
@@ -70,7 +90,7 @@ public class BusinessAutoRepository {
         final Iterator<BusinessAuto> iterator = businessAutos.iterator();
         while (iterator.hasNext()) {
             final BusinessAuto businessAuto = iterator.next();
-            if(businessAuto.getId().equals(id)) {
+            if (businessAuto.getId().equals(id)) {
                 iterator.remove();
                 return true;
             }

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class AutoRepository implements CrudRepository {
     private final List<Auto> autos;
@@ -15,6 +16,15 @@ public class AutoRepository implements CrudRepository {
     }
 
     @Override
+    public Optional<Auto> findById(String id) {
+        for (Auto auto : autos) {
+            if (auto.getId().equals(id)) {
+                return Optional.of(auto);
+            }
+        }
+        return Optional.empty();
+    }
+
     public Auto getById(String id) {
         for (Auto auto : autos) {
             if (auto.getId().equals(id)) {
