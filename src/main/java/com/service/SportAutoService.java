@@ -1,6 +1,5 @@
 package com.service;
 
-import com.model.BusinessAuto;
 import com.model.Manufacturer;
 import com.model.SportAuto;
 import com.repository.SportAutoRepository;
@@ -11,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SportAutoService {
 
@@ -37,7 +37,7 @@ public class SportAutoService {
             LOGGER.debug("Created auto {}", sportAuto.getId());
 
         }
-            return result;
+        return result;
     }
 
     public void updateSportAuto(SportAuto sportAuto) {
@@ -52,6 +52,26 @@ public class SportAutoService {
         sportAutoRepository.update(sportAuto);
     }
 
+    public int findSportAuto(String id) {
+        AtomicInteger atomicInteger = new AtomicInteger();
+        sportAutoRepository.findById(id).ifPresentOrElse(
+                sportAuto -> {
+                    atomicInteger.set(sportAuto.getMaxSpeed());
+                },
+                () -> {
+                    atomicInteger.set(0);
+                }
+        );
+        return atomicInteger.get();
+    }
+
+    public void findSportAutosByBodyType(String bodyType) {
+        sportAutoRepository.findByBodyType(bodyType)
+                .filter(sportAuto -> sportAuto.getBodyType().equals(bodyType))
+                .ifPresent(sportAuto -> sportAutoRepository.update(sportAuto));
+    }
+
+
     public void deleteSportAuto(String id) {
         sportAutoRepository.delete(id);
         LOGGER.debug("Deleted auto {}", id);
@@ -62,7 +82,7 @@ public class SportAutoService {
     }
 
     public void printAll() {
-        for (SportAuto sportAuto: sportAutoRepository.getAll()) {
+        for (SportAuto sportAuto : sportAutoRepository.getAll()) {
             System.out.println(sportAuto);
         }
     }

@@ -1,13 +1,13 @@
 package com.repository;
 
 
-import com.model.Auto;
 import com.model.SportAuto;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class SportAutoRepository {
 
@@ -28,6 +28,24 @@ public class SportAutoRepository {
 
         }
         return null;
+    }
+
+    public Optional<SportAuto> findById(String id) {
+        for (SportAuto sportAuto : sportAutos) {
+            if (sportAuto.getId().equals(id)) {
+                return Optional.of(sportAuto);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<SportAuto> findByBodyType(String bodyType) {
+        for (SportAuto sportAuto : sportAutos) {
+            if (sportAuto.getBodyType().equals(bodyType)) {
+                return Optional.of(sportAuto);
+            }
+        }
+        return Optional.empty();
     }
 
     public List<SportAuto> getAll() {
@@ -81,7 +99,7 @@ public class SportAutoRepository {
         Iterator<SportAuto> iterator = sportAutos.iterator();
         while (iterator.hasNext()) {
             final SportAuto sportAuto = iterator.next();
-            if(sportAuto.getId().equals(id)) {
+            if (sportAuto.getId().equals(id)) {
                 iterator.remove();
                 return true;
             }
