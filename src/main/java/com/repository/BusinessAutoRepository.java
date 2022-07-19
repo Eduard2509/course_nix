@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class BusinessAutoRepository {
+public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
 
     private final List<BusinessAuto> businessAutos;
 
@@ -17,14 +17,6 @@ public class BusinessAutoRepository {
         businessAutos = new LinkedList<>();
     }
 
-    public BusinessAuto getById(String id) {
-        for (BusinessAuto businessAuto : businessAutos) {
-            if (businessAuto.getId().equals(id)) {
-                return businessAuto;
-            }
-        }
-        return null;
-    }
 
     public List<BusinessAuto> getAll() {
         return businessAutos;
@@ -41,25 +33,6 @@ public class BusinessAutoRepository {
         return true;
     }
 
-
-    public Optional<BusinessAuto> findById(String id) {
-        for (BusinessAuto businessAuto : businessAutos) {
-            if (businessAuto.getId().equals(id)) {
-                return Optional.of(businessAuto);
-            }
-        }
-        return Optional.empty();
-    }
-
-    public Optional<BusinessAuto> findByBusinessClass(BusinessClassAuto businessClassAuto) {
-        for (BusinessAuto businessAuto : businessAutos) {
-            if (businessAuto.getBusinessClassAuto().equals(businessClassAuto)) {
-                return Optional.of(businessAuto);
-            }
-        }
-        return Optional.empty();
-    }
-
     public boolean saveAll(List<BusinessAuto> businessAuto) {
         if (businessAuto == null) {
             return false;
@@ -68,9 +41,9 @@ public class BusinessAutoRepository {
     }
 
     public boolean update(BusinessAuto businessAuto) {
-        final BusinessAuto founded = getById(businessAuto.getId());
-        if (founded != null) {
-            BusinessAutoCopy.copy(businessAuto, founded);
+        final Optional<BusinessAuto> optionalBusinessAuto = findById(businessAuto.getId());
+        if (optionalBusinessAuto.isPresent()) {
+            optionalBusinessAuto.ifPresent(founded -> BusinessAutoCopy.copy(businessAuto, founded));
             return true;
         }
         return false;
@@ -97,6 +70,25 @@ public class BusinessAutoRepository {
         }
         return false;
     }
+
+    public Optional<BusinessAuto> findByBusinessClass(BusinessClassAuto businessClassAuto) {
+        for (BusinessAuto businessAuto : businessAutos) {
+            if (businessAuto.getBusinessClassAuto().equals(businessClassAuto)) {
+                return Optional.of(businessAuto);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<BusinessAuto> findById(String id) {
+        for (BusinessAuto businessAuto : businessAutos) {
+            if (businessAuto.getId().equals(id)) {
+                return Optional.of(businessAuto);
+            }
+        }
+        return Optional.empty();
+    }
+
 
     private static class BusinessAutoCopy {
         static void copy(final BusinessAuto from, final BusinessAuto to) {

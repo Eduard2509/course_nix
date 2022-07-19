@@ -8,12 +8,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class AutoRepository implements CrudRepository {
+public class AutoRepository implements CrudRepository<Auto> {
     private final List<Auto> autos;
+
+    private static final AutoRepository AUTO_REPOSITORY = new AutoRepository();
 
     public AutoRepository() {
         autos = new LinkedList<>();
     }
+
 
     @Override
     public Optional<Auto> findById(String id) {
@@ -23,15 +26,6 @@ public class AutoRepository implements CrudRepository {
             }
         }
         return Optional.empty();
-    }
-
-    public Auto getById(String id) {
-        for (Auto auto : autos) {
-            if (auto.getId().equals(id)) {
-                return auto;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -61,9 +55,9 @@ public class AutoRepository implements CrudRepository {
 
     @Override
     public boolean update(Auto auto) {
-        final Auto founded = getById(auto.getId());
-        if (founded != null) {
-            AutoCopy.copy(auto, founded);
+        final Optional<Auto> optionalAuto = findById(auto.getId());
+        if (optionalAuto.isPresent()) {
+            optionalAuto.ifPresent(founded -> AutoCopy.copy(auto, founded));
             return true;
         }
         return false;
