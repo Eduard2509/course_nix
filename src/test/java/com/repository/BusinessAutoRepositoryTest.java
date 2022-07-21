@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 class BusinessAutoRepositoryTest {
 
@@ -29,25 +30,25 @@ class BusinessAutoRepositoryTest {
 
     @Test
     void getById_findOne() {
-        final BusinessAuto actual = target.getById(businessAuto.getId());
+        final Optional<BusinessAuto> actual = target.findById(businessAuto.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(businessAuto.getId(), actual.getId());
+        Assertions.assertEquals(businessAuto.getId(), actual.get().getId());
     }
 
     @Test
     void getById_notFind() {
-        final BusinessAuto actual = target.getById("333");
-        Assertions.assertNull(actual);
+        final Optional<BusinessAuto> actual = target.findById("333");
+        Assertions.assertEquals(Optional.empty(), actual);
     }
 
     @Test
     void getById_findOne_manyAutos() {
         final BusinessAuto otherAuto = createSimpleBusinessAuto();
         target.save(otherAuto);
-        final BusinessAuto actual = target.getById(businessAuto.getId());
+        final Optional<BusinessAuto> actual = target.findById(businessAuto.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(businessAuto.getId(), actual.getId());
-        Assertions.assertNotEquals(otherAuto.getId(), actual.getId());
+        Assertions.assertEquals(businessAuto.getId(), actual.get().getId());
+        Assertions.assertNotEquals(otherAuto.getId(), actual.get().getId());
     }
 
     @Test
@@ -62,8 +63,8 @@ class BusinessAutoRepositoryTest {
         businessAuto.setPrice(BigDecimal.ONE);
         final boolean actual = target.save(businessAuto);
         Assertions.assertTrue(actual);
-        final BusinessAuto actualAuto = target.getById(businessAuto.getId());
-        Assertions.assertEquals(BigDecimal.ONE, actualAuto.getPrice());
+        final Optional<BusinessAuto> actualAuto = target.findById(businessAuto.getId());
+        Assertions.assertEquals(BigDecimal.ONE, actualAuto.get().getPrice());
     }
 
     @Test
@@ -74,8 +75,8 @@ class BusinessAutoRepositoryTest {
     @Test
     void save_success_changePrice() {
         target.save(businessAuto);
-        final BusinessAuto actual = target.getById(businessAuto.getId());
-        Assertions.assertEquals(BigDecimal.valueOf(-1), actual.getPrice());
+        final Optional<BusinessAuto> actual = target.findById(businessAuto.getId());
+        Assertions.assertEquals(BigDecimal.valueOf(-1), actual.get().getPrice());
     }
 
     @Test
@@ -108,8 +109,8 @@ class BusinessAutoRepositoryTest {
         businessAuto.setPrice(BigDecimal.TEN);
         final boolean actual = target.update(businessAuto);
         Assertions.assertTrue(actual);
-        final BusinessAuto actualAuto = target.getById(businessAuto.getId());
-        Assertions.assertEquals(BigDecimal.TEN, actualAuto.getPrice());
+        final Optional<BusinessAuto> actualAuto = target.findById(businessAuto.getId());
+        Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
     }
 
     @Test
@@ -120,9 +121,9 @@ class BusinessAutoRepositoryTest {
 
         final boolean actual = target.updateByBodyType(businessAuto.getBodyType(), otherAuto);
         Assertions.assertTrue(actual);
-        final BusinessAuto actualAuto = target.getById(businessAuto.getId());
-        Assertions.assertEquals(Manufacturer.BMW, actualAuto.getManufacturer());
-        Assertions.assertEquals(BigDecimal.TEN, actualAuto.getPrice());
+        final Optional<BusinessAuto> actualAuto = target.findById(businessAuto.getId());
+        Assertions.assertEquals(Manufacturer.BMW, actualAuto.get().getManufacturer());
+        Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
     }
 
     @Test

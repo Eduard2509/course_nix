@@ -7,12 +7,9 @@ import com.repository.SportAutoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -29,63 +26,8 @@ class SportAutoServiceTest {
         target = new SportAutoService(sportAutoRepository);
     }
 
-    @Test
-    void createAutos_negativeCount() {
-        final List<SportAuto> actual = target.createAndSaveSportAutos(-1);
-        Assertions.assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createAutos_zeroCount() {
-        final List<SportAuto> actual = target.createAndSaveSportAutos(0);
-        Assertions.assertEquals(0, actual.size());
-    }
-
-    @Test
-    void createAutos() {
-        final List<SportAuto> actual = target.createAndSaveSportAutos(5);
-        Assertions.assertEquals(5, actual.size());
-        verify(sportAutoRepository, Mockito.times(5)).save(Mockito.any());
-    }
-
-
-    @Test
-    void printAll() {
-        List<SportAuto> autos = List.of(createSimpleAuto(), createSimpleAuto());
-        Mockito.when(sportAutoRepository.getAll()).thenReturn(autos);
-        target.printAll();
-    }
-
     private SportAuto createSimpleAuto() {
         return new SportAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 180);
-    }
-
-    @Test
-    void findOneById_null1() {
-        final SportAuto expected = createSimpleAuto();
-        Mockito.when(sportAutoRepository.getById("")).thenReturn(expected);
-        final SportAuto actual = target.findOneById(null);
-        Assertions.assertEquals(expected.getId(), actual.getId());
-    }
-
-    @Test
-    void findOneById_null2() {
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        target.findOneById(null);
-        verify(sportAutoRepository).getById(captor.capture());
-        Assertions.assertEquals("", captor.getValue());
-    }
-
-    @Test
-    void findOneById_null3() {
-        target.findOneById(null);
-        verify(sportAutoRepository).getById(Mockito.argThat(new ArgumentMatcher<String>() {
-
-            @Override
-            public boolean matches(String s) {
-                return s.isEmpty();
-            }
-        }));
     }
 
 
@@ -107,11 +49,6 @@ class SportAutoServiceTest {
         Assertions.assertEquals(BigDecimal.ZERO, sportAutoCheck.getPrice());
     }
 
-    @Test
-    void deleteSportAuto() {
-        target.deleteSportAuto("");
-        verify(sportAutoRepository).delete("");
-    }
 
     @Test
     void findSportAuto_success() {
@@ -133,9 +70,9 @@ class SportAutoServiceTest {
 
     @Test
     void findSportAutosByBodyType_success() {
-        final SportAuto sportAuto = createSimpleAuto();
-        String type = sportAuto.getBodyType();
-        Mockito.when(sportAutoRepository.findByBodyType(type)).thenReturn(Optional.of(sportAuto));
+        final Optional<SportAuto> sportAuto = Optional.of(createSimpleAuto());
+        String type = sportAuto.get().getBodyType();
+        Mockito.when(sportAutoRepository.findByBodyType(type)).thenReturn(sportAuto);
         target.findSportAutosByBodyType(type);
         Mockito.verify(sportAutoRepository).update(Mockito.any());
         Mockito.verify(sportAutoRepository).findByBodyType(type);

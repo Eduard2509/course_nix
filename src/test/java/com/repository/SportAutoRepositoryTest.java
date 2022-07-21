@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 class SportAutoRepositoryTest {
 
@@ -29,25 +30,25 @@ class SportAutoRepositoryTest {
 
     @Test
     void getById_findOne() {
-        final SportAuto actual = target.getById(sportAuto.getId());
+        final Optional<SportAuto> actual = target.findById(sportAuto.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(sportAuto.getId(), actual.getId());
+        Assertions.assertEquals(sportAuto.getId(), actual.get().getId());
     }
 
     @Test
     void getById_notFind() {
-        final SportAuto actual = target.getById("333");
-        Assertions.assertNull(actual);
+        final Optional<SportAuto> actual = target.findById("333");
+        Assertions.assertEquals(Optional.empty(), actual);
     }
 
     @Test
     void getById_findOne_manyAutos() {
         final SportAuto otherAuto = createSimpleSportAuto();
         target.save(otherAuto);
-        final SportAuto actual = target.getById(sportAuto.getId());
+        final Optional<SportAuto> actual = target.findById(sportAuto.getId());
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(sportAuto.getId(), actual.getId());
-        Assertions.assertNotEquals(otherAuto.getId(), actual.getId());
+        Assertions.assertEquals(sportAuto.getId(), actual.get().getId());
+        Assertions.assertNotEquals(otherAuto.getId(), actual.get().getId());
     }
 
     @Test
@@ -62,8 +63,8 @@ class SportAutoRepositoryTest {
         sportAuto.setPrice(BigDecimal.ONE);
         final boolean actual = target.save(sportAuto);
         Assertions.assertTrue(actual);
-        final SportAuto actualAuto = target.getById(sportAuto.getId());
-        Assertions.assertEquals(BigDecimal.ONE, actualAuto.getPrice());
+        final Optional<SportAuto> actualAuto = target.findById(sportAuto.getId());
+        Assertions.assertEquals(BigDecimal.ONE, actualAuto.get().getPrice());
     }
 
     @Test
@@ -74,8 +75,8 @@ class SportAutoRepositoryTest {
     @Test
     void save_success_changePrice() {
         target.save(sportAuto);
-        final SportAuto actual = target.getById(sportAuto.getId());
-        Assertions.assertEquals(BigDecimal.valueOf(-1), actual.getPrice());
+        final Optional<SportAuto> actual = target.findById(sportAuto.getId());
+        Assertions.assertEquals(BigDecimal.valueOf(-1), actual.get().getPrice());
     }
 
     @Test
@@ -108,8 +109,8 @@ class SportAutoRepositoryTest {
         sportAuto.setPrice(BigDecimal.TEN);
         final boolean actual = target.update(sportAuto);
         Assertions.assertTrue(actual);
-        final SportAuto actualAuto = target.getById(sportAuto.getId());
-        Assertions.assertEquals(BigDecimal.TEN, actualAuto.getPrice());
+        final Optional<SportAuto> actualAuto = target.findById(sportAuto.getId());
+        Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
     }
 
     @Test
@@ -120,9 +121,9 @@ class SportAutoRepositoryTest {
 
         final boolean actual = target.updateByBodyType(sportAuto.getBodyType(), otherAuto);
         Assertions.assertTrue(actual);
-        final SportAuto actualAuto = target.getById(sportAuto.getId());
-        Assertions.assertEquals(Manufacturer.BMW, actualAuto.getManufacturer());
-        Assertions.assertEquals(BigDecimal.TEN, actualAuto.getPrice());
+        final Optional<SportAuto> actualAuto = target.findById(sportAuto.getId());
+        Assertions.assertEquals(Manufacturer.BMW, actualAuto.get().getManufacturer());
+        Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
     }
 
     @Test
@@ -137,23 +138,18 @@ class SportAutoRepositoryTest {
 
     @Test
     void getById() {
-        SportAuto auto = target.getById(sportAuto.getId());
+        Optional<SportAuto> auto = target.findById(sportAuto.getId());
         Assertions.assertNotNull(auto);
-        Assertions.assertEquals(sportAuto.getMaxSpeed(), auto.getMaxSpeed());
-        Assertions.assertEquals(sportAuto.getId(), auto.getId());
+        Assertions.assertEquals(sportAuto.getMaxSpeed(), auto.get().getMaxSpeed());
+        Assertions.assertEquals(sportAuto.getId(), auto.get().getId());
     }
 
     @Test
     void getById_null() {
-        SportAuto auto = target.getById(" ");
-        Assertions.assertNull(auto);
+        Optional<SportAuto> auto = target.findById(" ");
+        Assertions.assertEquals(Optional.empty(), auto);
     }
 
-    @Test
-    void getById_null2() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.getById(null));
-
-    }
 
     @Test
     void save() {

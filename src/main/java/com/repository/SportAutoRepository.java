@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class SportAutoRepository {
+public class SportAutoRepository implements CrudRepository<SportAuto> {
 
     private final List<SportAuto> sportAutos;
 
@@ -17,19 +17,8 @@ public class SportAutoRepository {
         sportAutos = new LinkedList<>();
     }
 
-    public SportAuto getById(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException();
-        }
-        for (SportAuto sportAuto : sportAutos) {
-            if (sportAuto.getId().equals(id)) {
-                return sportAuto;
-            }
 
-        }
-        return null;
-    }
-
+    @Override
     public Optional<SportAuto> findById(String id) {
         for (SportAuto sportAuto : sportAutos) {
             if (sportAuto.getId().equals(id)) {
@@ -48,10 +37,12 @@ public class SportAutoRepository {
         return Optional.empty();
     }
 
+    @Override
     public List<SportAuto> getAll() {
         return sportAutos;
     }
 
+    @Override
     public boolean save(SportAuto sportAuto) {
         if (sportAuto == null) {
             throw new IllegalArgumentException("Auto must not be null");
@@ -63,6 +54,7 @@ public class SportAutoRepository {
         return true;
     }
 
+    @Override
     public boolean saveAll(List<SportAuto> sportAuto) {
         if (sportAuto == null) {
             return false;
@@ -70,10 +62,11 @@ public class SportAutoRepository {
         return sportAutos.addAll(sportAuto);
     }
 
+    @Override
     public boolean update(SportAuto sportAuto) {
-        final SportAuto founded = getById(sportAuto.getId());
-        if (founded != null) {
-            SportAutoCopy.copy(sportAuto, founded);
+        final Optional<SportAuto> optionalSportAuto = findById(sportAuto.getId());
+        if (optionalSportAuto.isPresent()) {
+            optionalSportAuto.ifPresent(founded -> SportAutoCopy.copy(sportAuto, founded));
             return true;
         }
         return false;
@@ -95,6 +88,7 @@ public class SportAutoRepository {
         return true;
     }
 
+    @Override
     public boolean delete(String id) {
         Iterator<SportAuto> iterator = sportAutos.iterator();
         while (iterator.hasNext()) {
