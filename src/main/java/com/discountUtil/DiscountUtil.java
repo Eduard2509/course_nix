@@ -2,6 +2,7 @@ package com.discountUtil;
 
 import com.model.Vehicle;
 
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
@@ -42,15 +43,12 @@ public class DiscountUtil<T extends Vehicle> {
         return randomDiscount;
     }
 
+
+
     public <O extends Number> BigDecimal upPrice(O price) {
 
-        if ((price.getClass().equals(Integer.class))) {
-            vehicle.setPrice(vehicle.getPrice().add(BigDecimal.valueOf((Integer) price)));
+            vehicle.setPrice(vehicle.getPrice().add(BigDecimal.valueOf(price.doubleValue())));
             System.out.println(vehicle);
-        } else {
-            vehicle.setPrice(vehicle.getPrice().add(BigDecimal.valueOf((Double) price)));
-            System.out.println(vehicle);
-        }
         return vehicle.getPrice();
     }
 

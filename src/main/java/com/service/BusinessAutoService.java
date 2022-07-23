@@ -29,7 +29,8 @@ public class BusinessAutoService extends VehicleService<BusinessAuto> {
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextDouble(100.0)),
                 "Mercedes",
-                getRandomBusinessClassAuto()
+                getRandomBusinessClassAuto(),
+                1
         );
     }
 

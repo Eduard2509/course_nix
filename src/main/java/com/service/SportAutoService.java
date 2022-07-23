@@ -24,7 +24,7 @@ public class SportAutoService extends VehicleService<SportAuto> {
                 Manufacturer.BMW,
                 BigDecimal.valueOf(RANDOM.nextDouble(200000.0)),
                 "Sport",
-                280
+                280, 1
         );
     }
 

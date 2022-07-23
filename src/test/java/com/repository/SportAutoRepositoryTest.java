@@ -18,7 +18,7 @@ class SportAutoRepositoryTest {
     private SportAuto sportAuto;
 
     private SportAuto createSimpleSportAuto() {
-        return new SportAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 180);
+        return new SportAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 180, 1);
     }
 
     @BeforeEach

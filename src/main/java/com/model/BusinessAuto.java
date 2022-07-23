@@ -11,8 +11,13 @@ public class BusinessAuto extends Auto {
 
     private BusinessClassAuto businessClassAuto;
 
-    public BusinessAuto(String model, Manufacturer manufacturer, BigDecimal price, String bodyType, BusinessClassAuto businessClassAuto) {
-        super(model, manufacturer, price, bodyType);
+    public BusinessAuto(String model,
+                        Manufacturer manufacturer,
+                        BigDecimal price,
+                        String bodyType,
+                        BusinessClassAuto businessClassAuto,
+                        int count) {
+        super(model, manufacturer, price, bodyType, count);
         this.businessClassAuto = businessClassAuto;
     }
 

@@ -11,8 +11,8 @@ public class SportAuto extends Auto {
 
     private int maxSpeed;
 
-    public SportAuto(String model, Manufacturer manufacturer, BigDecimal price, String bodyType, int maxSpeed) {
-        super(model, manufacturer, price, bodyType);
+    public SportAuto(String model, Manufacturer manufacturer, BigDecimal price, String bodyType, int maxSpeed, int count) {
+        super(model, manufacturer, price, bodyType, count);
         this.maxSpeed = maxSpeed;
     }
 

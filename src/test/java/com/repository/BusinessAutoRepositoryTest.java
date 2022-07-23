@@ -18,7 +18,7 @@ class BusinessAutoRepositoryTest {
     private BusinessAuto businessAuto;
 
     private BusinessAuto createSimpleBusinessAuto() {
-        return new BusinessAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", BusinessClassAuto.A);
+        return new BusinessAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", BusinessClassAuto.A, 1);
     }
 
     @BeforeEach

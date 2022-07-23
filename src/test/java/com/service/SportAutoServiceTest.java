@@ -27,7 +27,7 @@ class SportAutoServiceTest {
     }
 
     private SportAuto createSimpleAuto() {
-        return new SportAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 180);
+        return new SportAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 180, 1);
     }
 
 
