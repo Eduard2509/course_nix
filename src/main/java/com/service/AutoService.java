@@ -18,7 +18,7 @@ public class AutoService extends VehicleService<Auto> {
         return new Auto("Model-" + RANDOM.nextInt(1000),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
-                "Model-" + RANDOM.nextInt(1000));
+                "Model-" + RANDOM.nextInt(1000), 1);
     }
 
     public void findAutoPrice(String id) {
