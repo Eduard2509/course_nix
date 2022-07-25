@@ -38,7 +38,7 @@ class VehicleServiceTest {
 
     private Auto createSimpleAuto() {
         return new Auto("Model", Manufacturer.BMW,
-                BigDecimal.valueOf(1000.0), "Type");
+                BigDecimal.valueOf(1000.0), "Type", 1);
     }
 
     @Test

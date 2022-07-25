@@ -12,6 +12,6 @@ public class BusinessAutoUtil {
             new BusinessAuto("Model",
                     Manufacturer.BMW,
                     BigDecimal.TEN,
-                    "Sedan", BusinessClassAuto.A);
+                    "Sedan", BusinessClassAuto.A, 1);
 
 }
