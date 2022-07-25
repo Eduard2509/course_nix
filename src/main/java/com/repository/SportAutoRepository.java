@@ -12,11 +12,18 @@ import java.util.Optional;
 public class SportAutoRepository implements CrudRepository<SportAuto> {
 
     private final List<SportAuto> sportAutos;
+    private static SportAutoRepository instance;
 
     public SportAutoRepository() {
         sportAutos = new LinkedList<>();
     }
 
+    public static SportAutoRepository getInstance() {
+        if (instance == null) {
+            instance = new SportAutoRepository();
+        }
+        return instance;
+    }
 
     @Override
     public Optional<SportAuto> findById(String id) {

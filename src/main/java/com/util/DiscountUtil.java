@@ -1,8 +1,7 @@
-package com.discountUtil;
+package com.util;
 
 import com.model.Vehicle;
 
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
@@ -44,11 +43,10 @@ public class DiscountUtil<T extends Vehicle> {
     }
 
 
-
     public <O extends Number> BigDecimal upPrice(O price) {
 
-            vehicle.setPrice(vehicle.getPrice().add(BigDecimal.valueOf(price.doubleValue())));
-            System.out.println(vehicle);
+        vehicle.setPrice(vehicle.getPrice().add(BigDecimal.valueOf(price.doubleValue())));
+        System.out.println(vehicle);
         return vehicle.getPrice();
     }
 

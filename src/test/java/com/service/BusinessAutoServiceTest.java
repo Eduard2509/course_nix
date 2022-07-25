@@ -26,7 +26,7 @@ class BusinessAutoServiceTest {
 
 
     private BusinessAuto createSimpleAuto() {
-        return new BusinessAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", BusinessClassAuto.A, 1);
+        return new BusinessAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, BusinessClassAuto.A, 1);
     }
 
 
