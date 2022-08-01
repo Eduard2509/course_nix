@@ -1,6 +1,7 @@
 package com.service;
 
 import com.model.Auto;
+import com.repository.AutoRepository;
 import com.repository.CrudRepository;
 
 import java.math.BigDecimal;
@@ -8,9 +9,17 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AutoService extends VehicleService<Auto> {
 
+    private static AutoService instance;
 
     public AutoService(CrudRepository<Auto> repository) {
         super(repository);
+    }
+
+    public static AutoService getInstance() {
+        if (instance == null) {
+            instance = new AutoService(AutoRepository.getInstance());
+        }
+        return instance;
     }
 
     @Override

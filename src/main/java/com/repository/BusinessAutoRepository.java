@@ -13,8 +13,17 @@ public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
 
     private final List<BusinessAuto> businessAutos;
 
+    private static BusinessAutoRepository instance;
+
     public BusinessAutoRepository() {
         businessAutos = new LinkedList<>();
+    }
+
+    public static BusinessAutoRepository getInstance() {
+        if (instance == null) {
+            instance = new BusinessAutoRepository();
+        }
+        return instance;
     }
 
 
@@ -47,15 +56,6 @@ public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
             return true;
         }
         return false;
-    }
-
-    public boolean updateByBodyType(String bodyType, BusinessAuto copyFrom) {
-        for (BusinessAuto auto : businessAutos) {
-            if (auto.getBodyType().equals(bodyType)) {
-                BusinessAutoRepository.BusinessAutoCopy.copy(copyFrom, auto);
-            }
-        }
-        return true;
     }
 
 
@@ -94,7 +94,6 @@ public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
         static void copy(final BusinessAuto from, final BusinessAuto to) {
             to.setManufacturer(from.getManufacturer());
             to.setBusinessClassAuto(from.getBusinessClassAuto());
-            to.setBodyType(from.getBodyType());
             to.setModel(from.getModel());
             to.setPrice(from.getPrice());
         }

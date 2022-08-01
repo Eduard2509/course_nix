@@ -9,12 +9,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SportAutoService extends VehicleService<SportAuto> {
 
-
+    private static SportAutoService instance;
     private final SportAutoRepository sportAutoRepository;
 
     public SportAutoService(SportAutoRepository repository) {
         super(repository);
         this.sportAutoRepository = repository;
+    }
+
+    public static SportAutoService getInstance() {
+        if (instance == null) {
+            instance = new SportAutoService(SportAutoRepository.getInstance());
+        }
+        return instance;
     }
 
     @Override

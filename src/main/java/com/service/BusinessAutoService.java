@@ -10,12 +10,20 @@ import java.util.Optional;
 
 public class BusinessAutoService extends VehicleService<BusinessAuto> {
 
+    private static BusinessAutoService instance;
 
     private final BusinessAutoRepository businessAutoRepository;
 
     public BusinessAutoService(BusinessAutoRepository repository) {
         super(repository);
         this.businessAutoRepository = repository;
+    }
+
+    public static BusinessAutoService getInstance() {
+        if (instance == null) {
+            instance = new BusinessAutoService(BusinessAutoRepository.getInstance());
+        }
+        return instance;
     }
 
     public void updateBusinessAuto(BusinessAuto businessAuto) {
@@ -28,7 +36,6 @@ public class BusinessAutoService extends VehicleService<BusinessAuto> {
                 "Model: " + RANDOM.nextInt(100),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextDouble(100.0)),
-                "Mercedes",
                 getRandomBusinessClassAuto(),
                 1
         );

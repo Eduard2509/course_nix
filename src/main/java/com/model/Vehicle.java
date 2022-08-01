@@ -18,8 +18,9 @@ public abstract class Vehicle {
     protected String restyling;
     protected String time;
     protected int count;
+    protected VehicleType vehicleType;
 
-    protected Vehicle(String model, Manufacturer manufacturer, BigDecimal price, int count) {
+    protected Vehicle(String model, Manufacturer manufacturer, BigDecimal price, int count, VehicleType vehicleType) {
         this.id = UUID.randomUUID().toString();
         this.model = model;
         this.manufacturer = manufacturer;
@@ -27,5 +28,6 @@ public abstract class Vehicle {
         this.count = count;
         this.restyling = UUID.randomUUID().toString();
         this.time = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        this.vehicleType = vehicleType;
     }
 }

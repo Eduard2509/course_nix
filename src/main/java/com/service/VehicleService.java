@@ -28,7 +28,7 @@ public abstract class VehicleService<T extends Vehicle> {
             final T vehicle = creat();
             result.add(vehicle);
             repository.save(vehicle);
-            LOGGER.debug("Created auto {}", vehicle.getId());
+            LOGGER.info("Created auto {}", vehicle.getId());
         }
         return result;
     }
@@ -66,7 +66,7 @@ public abstract class VehicleService<T extends Vehicle> {
 
     public void delete(String id) {
         repository.delete(id);
-        LOGGER.debug("Deleted auto {}", id);
+        LOGGER.info("Deleted auto {}", id);
     }
 
     public Optional<T> findOneById(String id) {

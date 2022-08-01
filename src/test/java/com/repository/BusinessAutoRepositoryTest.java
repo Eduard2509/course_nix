@@ -18,7 +18,7 @@ class BusinessAutoRepositoryTest {
     private BusinessAuto businessAuto;
 
     private BusinessAuto createSimpleBusinessAuto() {
-        return new BusinessAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", BusinessClassAuto.A, 1);
+        return new BusinessAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, BusinessClassAuto.A, 1);
     }
 
     @BeforeEach
@@ -113,18 +113,6 @@ class BusinessAutoRepositoryTest {
         Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
     }
 
-    @Test
-    void updateByBodyType() {
-        final BusinessAuto otherAuto = createSimpleBusinessAuto();
-        otherAuto.setManufacturer(Manufacturer.BMW);
-        otherAuto.setPrice(BigDecimal.TEN);
-
-        final boolean actual = target.updateByBodyType(businessAuto.getBodyType(), otherAuto);
-        Assertions.assertTrue(actual);
-        final Optional<BusinessAuto> actualAuto = target.findById(businessAuto.getId());
-        Assertions.assertEquals(Manufacturer.BMW, actualAuto.get().getManufacturer());
-        Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
-    }
 
     @Test
     void delete_Success() {

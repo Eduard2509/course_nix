@@ -1,7 +1,6 @@
 package com.model.garage;
 
 import com.model.Vehicle;
-import com.service.VehicleService;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
