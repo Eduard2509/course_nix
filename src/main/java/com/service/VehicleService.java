@@ -7,10 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class VehicleService<T extends Vehicle> {
 
@@ -72,4 +71,41 @@ public abstract class VehicleService<T extends Vehicle> {
     public Optional<T> findOneById(String id) {
         return id == null ? repository.findById("") : repository.findById(id);
     }
+
+
+    public List<T> getRichAuto(List<T> vehicles, BigDecimal price) {
+        System.out.println(vehicles.stream()
+                .filter(value -> value.getPrice().compareTo(price) > 0)
+                .map(Vehicle::getModel)
+                .collect(Collectors.toList()));
+        return vehicles;
+    }
+
+    public int sumVehicle(List<T> vehicles) {
+        return vehicles.stream()
+                .map(Vehicle::getCount)
+                .reduce(0, Integer::sum);
+    }
+
+    final Comparator<Vehicle> comparator = Comparator.comparing(Vehicle::getManufacturer)
+            .reversed();
+
+    public void sortedAuto(List<T> vehicles) {
+        System.out.println(vehicles.stream()
+                .sorted(comparator)
+                .distinct()
+                .collect(Collectors.toMap(Vehicle::getId, Vehicle::getModel)));
+    }
+
+    public void getPriceStatistics(List<T> vehicles) {
+        System.out.println(vehicles.stream()
+                .map(Vehicle::getPrice)
+                .mapToDouble(BigDecimal::doubleValue)
+                .summaryStatistics());
+    }
+
+
+    Predicate<Vehicle> predicate = vehicle -> vehicle.getPrice().compareTo(BigDecimal.ZERO) > 0;
+
+
 }

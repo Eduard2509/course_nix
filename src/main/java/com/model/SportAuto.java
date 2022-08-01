@@ -13,7 +13,7 @@ public class SportAuto extends Vehicle {
     private int maxSpeed;
 
     public SportAuto(String model, Manufacturer manufacturer, BigDecimal price, String bodyType, int maxSpeed, int count) {
-        super(model, manufacturer, price, count, VehicleType.SPORTAUTO);
+        super(model, manufacturer, price, count, VehicleType.SPORT_AUTO);
         this.maxSpeed = maxSpeed;
     }
 

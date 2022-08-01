@@ -24,8 +24,8 @@ public class Print implements Command {
 
         switch (value) {
             case AUTO -> AUTO_SERVICE.printAll();
-            case BUSINESSAUTO -> BUSINESS_AUTO_SERVICE.printAll();
-            case SPORTAUTO -> SPORT_AUTO_SERVICE.printAll();
+            case BUSINESS_AUTO -> BUSINESS_AUTO_SERVICE.printAll();
+            case SPORT_AUTO -> SPORT_AUTO_SERVICE.printAll();
             default -> throw new IllegalArgumentException("Cannot build " + value);
         }
     }

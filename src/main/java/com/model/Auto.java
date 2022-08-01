@@ -4,15 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
 public class Auto extends Vehicle {
     private String bodyType;
+    private List<String> details;
 
-    public Auto(String model, Manufacturer manufacturer, BigDecimal price, String bodyType, int count) {
+    public Auto(String model, Manufacturer manufacturer, BigDecimal price, String bodyType, int count, List<String> details) {
         super(model, manufacturer, price, count, VehicleType.AUTO);
         this.bodyType = bodyType;
+        this.details = details;
     }
 
     @Override

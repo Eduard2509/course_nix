@@ -26,7 +26,7 @@ public class Update implements Command {
         final VehicleType value = values[userInput];
 
         switch (value) {
-            case BUSINESSAUTO -> {
+            case BUSINESS_AUTO -> {
                 System.out.println("Please enter auto's id");
                 String idAuto = SCANNER.nextLine();
                 System.out.println("Please enter price: ");
@@ -40,7 +40,7 @@ public class Update implements Command {
                 BigDecimal priceAuto = new BigDecimal(SCANNER.nextLine());
                 AUTO_SERVICE.updateVehicleByPrice(idAuto, priceAuto);
             }
-            case SPORTAUTO -> {
+            case SPORT_AUTO -> {
                 System.out.println("Please enter auto's id");
                 String idSportAuto = SCANNER.nextLine();
                 System.out.println("Please enter price: ");

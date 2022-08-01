@@ -69,21 +69,21 @@ public class Tree<T extends Vehicle> {
 
 
     public void printTree() {
-        Stack globalStack = new Stack();
+        Stack<Node> globalStack = new Stack();
         globalStack.push(rootTree);
         int emptyLeaf = 32;
         boolean isRowEmpty = false;
         System.out.println("****......................................................****");
         while (isRowEmpty == false) {
 
-            Stack localStack = new Stack();
+            Stack<Node> localStack = new Stack();
             isRowEmpty = true;
 
             for (int j = 0; j < emptyLeaf; j++)
                 System.out.print(' ');
 
             while (globalStack.isEmpty() == false) {
-                Node temp = (Node) globalStack.pop();
+                Node temp = globalStack.pop();
                 if (temp != null) {
                     System.out.print("Price: " + temp.value.getPrice() + " " + temp.value.getModel());
                     localStack.push(temp.left);
@@ -119,7 +119,7 @@ public class Tree<T extends Vehicle> {
         if (node == null) {
             return BigDecimal.ZERO;
         }
-            return sum(node.left).add(node.value.getPrice().add(sum(node.right)));
+        return sum(node.left).add(node.value.getPrice().add(sum(node.right)));
 
     }
 
