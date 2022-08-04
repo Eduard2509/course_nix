@@ -1,11 +1,14 @@
 package com.service;
 
 import com.model.Auto;
+import com.model.Engine;
 import com.model.Manufacturer;
 import com.repository.AutoRepository;
 import com.repository.CrudRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class AutoService extends VehicleService<Auto> {
 
     @Override
     protected Auto creat() {
+        Engine engine = new Engine(3.3, "Sport");
         List<String> details = new ArrayList<>();
         details.add("door");
         details.add("Wildshield");
@@ -37,7 +41,8 @@ public class AutoService extends VehicleService<Auto> {
         return new Auto("Model-" + RANDOM.nextInt(1000),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
-                "Model-" + RANDOM.nextInt(1000), 1, details);
+                "Model-" + RANDOM.nextInt(1000),
+                1, details, engine, "$", LocalDateTime.now());
     }
 
     public void findAutoPrice(String id) {
@@ -68,27 +73,46 @@ public class AutoService extends VehicleService<Auto> {
                 .anyMatch(auto -> auto.equals(detail));
     }
 
-    Function<Map<String, Object>, Auto> createVehicleByMap = stringObjectMap -> {
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AutoService{");
+        sb.append("createVehicleByMap=").append(createVehicleByMap);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public Function<Map<String, Object>, Auto> createVehicleByMap = stringObjectMap -> {
+
+        Engine engine = new Engine(Integer.parseInt(stringObjectMap.getOrDefault("volume", 0).toString()),
+                (String) stringObjectMap.getOrDefault("brand", "nonBrand"));
+
         List<String> details = new ArrayList<>();
         details.add("Door");
         details.add("Wildshield");
         details.add("Wheel");
         details.add("Steering wheel");
 
-        Object model = stringObjectMap.getOrDefault("Model", "Model0");
-        Object type = stringObjectMap.getOrDefault("Type", "Type0");
-        Object manufacturer = stringObjectMap.getOrDefault("Manufacturer", Manufacturer.NON);
-        Object price = stringObjectMap.getOrDefault("Price", BigDecimal.ZERO);
-        Object count = stringObjectMap.getOrDefault("Count", 0);
-        Object details1 = stringObjectMap.getOrDefault("details", details);
+        Object model = stringObjectMap.getOrDefault("model", "Model0");
+        Object type = stringObjectMap.getOrDefault("bodyType", "Type0");
+        Object manufacturer = stringObjectMap.getOrDefault("manufacturer", Manufacturer.NON);
+        Object price = stringObjectMap.getOrDefault("price", BigDecimal.ZERO);
+        Object count = stringObjectMap.getOrDefault("count", 0);
+        Object details1 = stringObjectMap.getOrDefault("Details", details);
+        Object created = stringObjectMap.getOrDefault("created", LocalDateTime.now());
+        Object engine1 = stringObjectMap.getOrDefault("engine", engine);
+        Object currency = stringObjectMap.getOrDefault("currency", "$");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
         return new Auto((String) model,
-                (Manufacturer) manufacturer,
-                (BigDecimal) price,
+                Manufacturer.valueOf(manufacturer.toString()),
+                BigDecimal.valueOf(Long.parseLong(price.toString())),
                 (String) type,
-                (int) count,
-                (List<String>) details1);
+                Integer.parseInt(count.toString()),
+                (List<String>) details1,
+                engine,
+                (String) currency,
+                LocalDateTime.parse(created.toString(), formatter));
     };
-
 }
 

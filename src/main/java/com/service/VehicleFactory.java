@@ -3,6 +3,7 @@ package com.service;
 import com.model.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +25,7 @@ public class VehicleFactory {
     }
 
     public Vehicle build(VehicleType type) {
+        Engine engine = new Engine(3.3, "Sport");
         List<String> details = new ArrayList<>();
         details.add("door");
         details.add("Windshield");
@@ -34,7 +36,8 @@ public class VehicleFactory {
                     "Model-" + RANDOM.nextInt(1000),
                     getRandomManufacturer(),
                     BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
-                    "Model-" + RANDOM.nextInt(1000), 1, details
+                    "Model-" + RANDOM.nextInt(1000),
+                    1, details, engine, "$", LocalDateTime.now()
             );
 
             case BUSINESS_AUTO -> new BusinessAuto(

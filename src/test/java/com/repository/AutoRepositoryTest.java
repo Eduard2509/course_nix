@@ -1,12 +1,14 @@
 package com.repository;
 
 import com.model.Auto;
+import com.model.Engine;
 import com.model.Manufacturer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,13 +21,15 @@ class AutoRepositoryTest {
 
 
     private Auto createSimpleAuto() {
+        Engine engine = new Engine(3.3, "Sport");
+
         List<String> details = new ArrayList<>();
         details.add("door");
         details.add("Wildshield");
         details.add("Wheel");
         details.add("steering wheel");
         return new Auto("Model", Manufacturer.BMW, BigDecimal.ZERO,
-                "Type", 1, details);
+                "Type", 1, details, engine, "$", LocalDateTime.now());
     }
 
     @BeforeEach

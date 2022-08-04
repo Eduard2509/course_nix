@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -16,7 +15,7 @@ public abstract class Vehicle {
     protected BigDecimal price;
     protected Manufacturer manufacturer;
     protected String restyling;
-    protected String time;
+    protected LocalDateTime created;
     protected int count;
     protected VehicleType vehicleType;
 
@@ -27,7 +26,7 @@ public abstract class Vehicle {
         this.price = price;
         this.count = count;
         this.restyling = UUID.randomUUID().toString();
-        this.time = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        this.created = LocalDateTime.now();
         this.vehicleType = vehicleType;
     }
 }
