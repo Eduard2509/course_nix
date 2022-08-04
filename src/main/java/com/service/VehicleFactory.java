@@ -3,12 +3,15 @@ package com.service;
 import com.model.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class VehicleFactory {
     private static VehicleFactory instance;
 
     private static final Random RANDOM = new Random();
+
 
     private VehicleFactory() {
     }
@@ -21,15 +24,20 @@ public class VehicleFactory {
     }
 
     public Vehicle build(VehicleType type) {
+        List<String> details = new ArrayList<>();
+        details.add("door");
+        details.add("Windshield");
+        details.add("Wheel");
+        details.add("steering wheel");
         return switch (type) {
             case AUTO -> new Auto(
                     "Model-" + RANDOM.nextInt(1000),
                     getRandomManufacturer(),
                     BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
-                    "Model-" + RANDOM.nextInt(1000), 1
+                    "Model-" + RANDOM.nextInt(1000), 1, details
             );
 
-            case BUSINESSAUTO -> new BusinessAuto(
+            case BUSINESS_AUTO -> new BusinessAuto(
                     "Model: " + RANDOM.nextInt(100),
                     getRandomManufacturer(),
                     BigDecimal.valueOf(RANDOM.nextDouble(100.0)),
@@ -37,7 +45,7 @@ public class VehicleFactory {
                     1
             );
 
-            case SPORTAUTO -> new SportAuto("Model: " + RANDOM.nextInt(200),
+            case SPORT_AUTO -> new SportAuto("Model: " + RANDOM.nextInt(200),
                     Manufacturer.BMW,
                     BigDecimal.valueOf(RANDOM.nextDouble(200000.0)),
                     "Sport",

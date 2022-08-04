@@ -16,7 +16,7 @@ public class BusinessAuto extends Vehicle {
                         BigDecimal price,
                         BusinessClassAuto businessClassAuto,
                         int count) {
-        super(model, manufacturer, price, count, VehicleType.BUSINESSAUTO);
+        super(model, manufacturer, price, count, VehicleType.BUSINESS_AUTO);
         this.businessClassAuto = businessClassAuto;
     }
 

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 class AutoServiceTest {
@@ -23,7 +25,12 @@ class AutoServiceTest {
     }
 
     private Auto createSimpleAuto() {
-        return new Auto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 1);
+        List<String> details = new ArrayList<>();
+        details.add("door");
+        details.add("Wildshield");
+        details.add("Wheel");
+        details.add("steering wheel");
+        return new Auto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 1, details);
     }
 
     @Test

@@ -25,7 +25,7 @@ public class Delete implements Command {
         final VehicleType value = values[userInput];
 
         switch (value) {
-            case BUSINESSAUTO -> {
+            case BUSINESS_AUTO -> {
                 System.out.println("Please enter car's id");
                 String idCar = SCANNER.nextLine();
                 BUSINESS_AUTO_SERVICE.delete(idCar);
@@ -35,7 +35,7 @@ public class Delete implements Command {
                 String idCar = SCANNER.nextLine();
                 AUTO_SERVICE.delete(idCar);
             }
-            case SPORTAUTO -> {
+            case SPORT_AUTO -> {
                 System.out.println("Please enter car's id");
                 String idCar = SCANNER.nextLine();
                 SPORT_AUTO_SERVICE.delete(idCar);
