@@ -3,10 +3,8 @@ package com.command;
 import com.model.Auto;
 import com.service.AutoService;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -22,10 +20,23 @@ public class ReadFromFileXml implements Command {
         System.out.println(readXmlAndCreateAuto());
     }
 
+    private InputStream getFileFromResourceAsStream(String fileName) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        if (inputStream == null) {
+            throw new IllegalArgumentException("file not found! " + fileName);
+        } else {
+            return inputStream;
+        }
+    }
+
     public Auto readXmlAndCreateAuto() {
-        File file = new File("src/main/resources/auto.xml");
+        ReadFromFileXml readFromFileXml = new ReadFromFileXml();
+        String fileName = "auto.xml";
+        InputStream inputStream = readFromFileXml.getFileFromResourceAsStream(fileName);
         final Map<String, Object> map = new HashMap<>();
-        try (final BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+        try (final InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 final Matcher matcher = PATTERN.matcher(line);

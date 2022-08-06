@@ -4,9 +4,10 @@ import com.model.Auto;
 import com.service.AutoService;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -16,15 +17,29 @@ public class ReadFromFileJson implements Command {
     private static final AutoService AUTO_SERVICE = AutoService.getInstance();
     private static final Pattern PATTERN = Pattern.compile("\"(?<key>[\\S]+)\": (\"(?<value>[\\S ]+)\")?");
 
+
     @Override
-    public void execute() {
+    public void execute(){
         System.out.println(readJsonAndCreateAuto());
     }
 
+    private InputStream getFileFromResourceAsStream(String fileName){
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        if (inputStream == null) {
+            throw new IllegalArgumentException("file not found! " + fileName);
+        } else {
+            return inputStream;
+        }
+    }
+
     public Auto readJsonAndCreateAuto() {
-        File file = new File("src/main/resources/auto.json");
+        ReadFromFileJson readFromFileJson = new ReadFromFileJson();
+        String fileName = "auto.json";
+        InputStream inputStream = readFromFileJson.getFileFromResourceAsStream(fileName);
         final Map<String, Object> map = new HashMap<>();
-        try (final BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+        try (final InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 final Matcher matcher = PATTERN.matcher(line);
