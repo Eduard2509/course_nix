@@ -1,6 +1,7 @@
 package com.service;
 
 import com.model.Auto;
+import com.model.Engine;
 import com.model.Manufacturer;
 import com.repository.AutoRepository;
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +12,7 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,13 +40,14 @@ class VehicleServiceTest {
     }
 
     private Auto createSimpleAuto() {
+        Engine engine = new Engine(3.3, "Sport");
         List<String> details = new ArrayList<>();
         details.add("door");
         details.add("Wildshield");
         details.add("Wheel");
         details.add("steering wheel");
         return new Auto("Model", Manufacturer.BMW,
-                BigDecimal.valueOf(1000.0), "Type", 1, details);
+                BigDecimal.valueOf(1000.0), "Type", 1, details, engine, "$", LocalDateTime.now());
     }
 
     @Test

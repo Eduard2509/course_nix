@@ -8,6 +8,8 @@ public enum Action {
     UPDATE("Update vehicle", new Update()),
     DELETE("Delete vehicle", new Delete()),
     PRINT("Print vehicles", new Print()),
+    READ_FROM_FILE_XML("Read from xml file", new ReadFromFileXml()),
+    READ_FROM_FILE_JSON("Read from json file", new ReadFromFileJson()),
     EXIT("Exit", null);
 
     private String name;

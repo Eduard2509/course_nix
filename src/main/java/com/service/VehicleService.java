@@ -73,12 +73,11 @@ public abstract class VehicleService<T extends Vehicle> {
     }
 
 
-    public List<T> getRichAuto(List<T> vehicles, BigDecimal price) {
+    public void getRichAuto(List<T> vehicles, BigDecimal price) {
         System.out.println(vehicles.stream()
                 .filter(value -> value.getPrice().compareTo(price) > 0)
                 .map(Vehicle::getModel)
                 .collect(Collectors.toList()));
-        return vehicles;
     }
 
     public int sumVehicle(List<T> vehicles) {

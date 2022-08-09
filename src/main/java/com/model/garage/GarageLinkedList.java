@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Optional;
@@ -211,7 +212,7 @@ public class GarageLinkedList<K extends Vehicle> {
         if (head == null) {
             return "Garage is empty";
         }
-        return current.getVehicle().getTime();
+        return current.getVehicle().getCreated().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
     }
 
     public String getDateLastRestyling() {
@@ -221,7 +222,7 @@ public class GarageLinkedList<K extends Vehicle> {
             Node<K> current = head;
             while (true) {
                 if (current.nextElement == null) {
-                    return current.getVehicle().getTime();
+                    return current.getVehicle().getCreated().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
                 }
                 current = current.nextElement;
             }
