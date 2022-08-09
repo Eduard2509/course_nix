@@ -1,5 +1,7 @@
 package com;
 
+import com.builder.AutoBuilder;
+import com.builder.Director;
 import com.command.Action;
 import com.command.Command;
 import com.util.UserInputUtil;
@@ -11,28 +13,31 @@ public class Main {
 
 
     public static void main(String[] args) {
+        Director director = new Director();
+        AutoBuilder autoBuilder = new AutoBuilder();
+        System.out.println(director.constructorAuto(autoBuilder));
 
-        final Action[] actions = Action.values();
-        final List<String> names = getNames(actions);
-        Command command;
-        do {
-            command = executeCommand(actions, names);
-        } while (command != null);
+//        final Action[] actions = Action.values();
+//        final List<String> names = getNames(actions);
+//        Command command;
+//        do {
+//            command = executeCommand(actions, names);
+//        } while (command != null);
+//    }
+//
+//    private static Command executeCommand(Action[] actions, List<String> names) {
+//        int userInput = UserInputUtil.getUserInput("What you want:", names);
+//        final Action action = actions[userInput];
+//        return action.execute();
+//    }
+//
+//    private static List<String> getNames(Action[] actions) {
+//        final List<String> names = new ArrayList<>(actions.length);
+//        for (Action action : actions) {
+//            names.add(action.getName());
+//        }
+//        return names;
+//    }
+
     }
-
-    private static Command executeCommand(Action[] actions, List<String> names) {
-        int userInput = UserInputUtil.getUserInput("What you want:", names);
-        final Action action = actions[userInput];
-        return action.execute();
-    }
-
-    private static List<String> getNames(Action[] actions) {
-        final List<String> names = new ArrayList<>(actions.length);
-        for (Action action : actions) {
-            names.add(action.getName());
-        }
-        return names;
-    }
-
-
 }
