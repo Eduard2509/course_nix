@@ -103,8 +103,6 @@ public abstract class VehicleService<T extends Vehicle> {
                 .summaryStatistics());
     }
 
-
     Predicate<Vehicle> predicate = vehicle -> vehicle.getPrice().compareTo(BigDecimal.ZERO) > 0;
-
 
 }

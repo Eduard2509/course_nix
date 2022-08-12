@@ -3,6 +3,7 @@ package com.service;
 import com.model.BusinessAuto;
 import com.model.BusinessClassAuto;
 import com.model.Manufacturer;
+import com.model.Vehicle;
 import com.repository.BusinessAutoRepository;
 
 import java.math.BigDecimal;
@@ -50,8 +51,8 @@ public class BusinessAutoService extends VehicleService<BusinessAuto> {
     public Manufacturer findManufacturerBusinessAuto(String id) {
         StringBuilder sb = new StringBuilder();
         repository.findById(id)
-                .map(businessAuto -> businessAuto.getManufacturer())
-                .ifPresent(manufacturer -> sb.append(manufacturer));
+                .map(Vehicle::getManufacturer)
+                .ifPresent(sb::append);
         if (sb.isEmpty()) {
             return Manufacturer.NON;
         }
