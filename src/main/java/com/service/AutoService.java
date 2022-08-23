@@ -1,5 +1,7 @@
 package com.service;
 
+import com.annotations.Autowired;
+import com.annotations.Singleton;
 import com.model.Auto;
 import com.model.Engine;
 import com.model.Manufacturer;
@@ -15,10 +17,12 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+@Singleton
 public class AutoService extends VehicleService<Auto> {
 
     private static AutoService instance;
 
+    @Autowired
     public AutoService(CrudRepository<Auto> repository) {
         super(repository);
     }

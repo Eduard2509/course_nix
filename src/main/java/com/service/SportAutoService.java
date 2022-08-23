@@ -1,5 +1,7 @@
 package com.service;
 
+import com.annotations.Autowired;
+import com.annotations.Singleton;
 import com.model.Manufacturer;
 import com.model.SportAuto;
 import com.repository.SportAutoRepository;
@@ -7,11 +9,13 @@ import com.repository.SportAutoRepository;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Singleton
 public class SportAutoService extends VehicleService<SportAuto> {
 
     private static SportAutoService instance;
     private final SportAutoRepository sportAutoRepository;
 
+    @Autowired
     public SportAutoService(SportAutoRepository repository) {
         super(repository);
         this.sportAutoRepository = repository;

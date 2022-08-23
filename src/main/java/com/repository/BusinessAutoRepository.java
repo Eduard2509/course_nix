@@ -1,5 +1,7 @@
 package com.repository;
 
+import com.annotations.Autowired;
+import com.annotations.Singleton;
 import com.model.BusinessAuto;
 import com.model.BusinessClassAuto;
 
@@ -9,12 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
 
     private final List<BusinessAuto> businessAutos;
 
     private static BusinessAutoRepository instance;
 
+    @Autowired
     public BusinessAutoRepository() {
         businessAutos = new LinkedList<>();
     }

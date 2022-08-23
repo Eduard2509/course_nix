@@ -1,5 +1,7 @@
 package com.repository;
 
+import com.annotations.Autowired;
+import com.annotations.Singleton;
 import com.model.Auto;
 
 import java.math.BigDecimal;
@@ -8,11 +10,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 public class AutoRepository implements CrudRepository<Auto> {
     private final List<Auto> autos;
 
     private static AutoRepository instance;
 
+    @Autowired
     public AutoRepository() {
         autos = new LinkedList<>();
     }
