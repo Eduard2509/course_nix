@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class VehicleFactory {
     private static VehicleFactory instance;
@@ -33,6 +34,7 @@ public class VehicleFactory {
         details.add("steering wheel");
         return switch (type) {
             case AUTO -> new Auto(
+                    "Id" + UUID.randomUUID().toString(),
                     "Model-" + RANDOM.nextInt(1000),
                     getRandomManufacturer(),
                     BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
@@ -41,6 +43,7 @@ public class VehicleFactory {
             );
 
             case BUSINESS_AUTO -> new BusinessAuto(
+                    UUID.randomUUID().toString(),
                     "Model: " + RANDOM.nextInt(100),
                     getRandomManufacturer(),
                     BigDecimal.valueOf(RANDOM.nextDouble(100.0)),
@@ -48,7 +51,7 @@ public class VehicleFactory {
                     1
             );
 
-            case SPORT_AUTO -> new SportAuto("Model: " + RANDOM.nextInt(200),
+            case SPORT_AUTO -> new SportAuto(UUID.randomUUID().toString(),"Model: " + RANDOM.nextInt(200),
                     Manufacturer.BMW,
                     BigDecimal.valueOf(RANDOM.nextDouble(200000.0)),
                     "Sport",

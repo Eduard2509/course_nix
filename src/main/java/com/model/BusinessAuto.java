@@ -11,14 +11,17 @@ import java.math.BigDecimal;
 public class BusinessAuto extends Vehicle {
 
     private BusinessClassAuto businessClassAuto;
+    private String id;
 
-    public BusinessAuto(String model,
+    public BusinessAuto(String id,
+                        String model,
                         Manufacturer manufacturer,
                         BigDecimal price,
                         BusinessClassAuto businessClassAuto,
                         int count) {
         super(model, manufacturer, price, count, VehicleType.BUSINESS_AUTO);
         this.businessClassAuto = businessClassAuto;
+        this.id = id;
     }
 
     @Override

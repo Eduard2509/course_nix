@@ -60,7 +60,6 @@ public abstract class VehicleService<T extends Vehicle> {
             vehicle1.setPrice(price);
             repository.update(vehicle1);
         });
-
     }
 
     public void delete(String id) {

@@ -1,6 +1,5 @@
 package com.repository;
 
-
 import com.annotations.Autowired;
 import com.annotations.Singleton;
 import com.model.SportAuto;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-
 public class SportAutoRepository implements CrudRepository<SportAuto> {
 
     private final List<SportAuto> sportAutos;

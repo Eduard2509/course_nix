@@ -7,37 +7,36 @@ import com.model.BusinessClassAuto;
 import com.model.Manufacturer;
 import com.model.Vehicle;
 import com.repository.BusinessAutoRepository;
+import com.repository.DBBusinessAutoRepository;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.UUID;
 
 @Singleton
 public class BusinessAutoService extends VehicleService<BusinessAuto> {
 
     private static BusinessAutoService instance;
 
-    private final BusinessAutoRepository businessAutoRepository;
+    private final DBBusinessAutoRepository businessAutoRepository;
 
     @Autowired
-    public BusinessAutoService(BusinessAutoRepository repository) {
+    public BusinessAutoService(DBBusinessAutoRepository repository) {
         super(repository);
         this.businessAutoRepository = repository;
     }
 
     public static BusinessAutoService getInstance() {
         if (instance == null) {
-            instance = new BusinessAutoService(BusinessAutoRepository.getInstance());
+            instance = new BusinessAutoService(DBBusinessAutoRepository.getInstance());
         }
         return instance;
     }
 
-    public void updateBusinessAuto(BusinessAuto businessAuto) {
-        repository.update(businessAuto);
-    }
 
     @Override
     protected BusinessAuto creat() {
         return new BusinessAuto(
+                UUID.randomUUID().toString(),
                 "Model: " + RANDOM.nextInt(100),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextDouble(100.0)),
@@ -63,12 +62,6 @@ public class BusinessAutoService extends VehicleService<BusinessAuto> {
         return Manufacturer.valueOf(sb.toString());
     }
 
-    public BusinessClassAuto findByBusinessClassAuto(BusinessClassAuto businessClassAuto) {
-        Optional<BusinessAuto> businessAuto = businessAutoRepository
-                .findByBusinessClass(businessClassAuto)
-                .or(() -> Optional.of(BusinessAutoUtil.SIMPLE_BUSINESS_AUTO));
-        return businessAuto.get().getBusinessClassAuto();
-    }
 
     public BusinessAuto findBusinessAuto(String id) {
         BusinessAuto businessAuto = businessAutoRepository.findById(id)

@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,10 +15,12 @@ public class Auto extends Vehicle {
     private List<String> details;
     private Engine engine;
     private String currency;
+    private String id;
 
-    public Auto(String model, Manufacturer manufacturer, BigDecimal price,
+    public Auto(String id, String model, Manufacturer manufacturer, BigDecimal price,
                 String bodyType, int count, List<String> details, Engine engine, String currency, LocalDateTime created) {
         super(model, manufacturer, price, count, VehicleType.AUTO);
+        this.id = id;
         this.bodyType = bodyType;
         this.details = details;
         this.engine = engine;

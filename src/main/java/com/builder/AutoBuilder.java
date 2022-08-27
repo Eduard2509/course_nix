@@ -93,7 +93,7 @@ public class AutoBuilder implements Builder {
     public Auto getAuto() {
         Objects.requireNonNull(price);
         Objects.requireNonNull(id);
-        return new Auto(model, manufacturer, price,
+        return new Auto(id, model, manufacturer, price,
                 bodyType, count, details, engine, currency, created);
     }
 

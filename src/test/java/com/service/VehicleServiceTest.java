@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
 
@@ -46,7 +47,8 @@ class VehicleServiceTest {
         details.add("Wildshield");
         details.add("Wheel");
         details.add("steering wheel");
-        return new Auto("Model", Manufacturer.BMW,
+        return new Auto("ID" + UUID.randomUUID().toString(),
+                "Model", Manufacturer.BMW,
                 BigDecimal.valueOf(1000.0), "Type", 1, details, engine, "$", LocalDateTime.now());
     }
 

@@ -7,6 +7,7 @@ import com.model.Engine;
 import com.model.Manufacturer;
 import com.repository.AutoRepository;
 import com.repository.CrudRepository;
+import com.repository.DBAutoRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -29,7 +31,7 @@ public class AutoService extends VehicleService<Auto> {
 
     public static AutoService getInstance() {
         if (instance == null) {
-            instance = new AutoService(AutoRepository.getInstance());
+            instance = new AutoService(DBAutoRepository.getInstance());
         }
         return instance;
     }
@@ -42,7 +44,8 @@ public class AutoService extends VehicleService<Auto> {
         details.add("Wildshield");
         details.add("Wheel");
         details.add("steering wheel");
-        return new Auto("Model-" + RANDOM.nextInt(1000),
+        return new Auto(UUID.randomUUID().toString(),
+                "Model-" + RANDOM.nextInt(1000),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
                 "Model-" + RANDOM.nextInt(1000),
@@ -96,6 +99,7 @@ public class AutoService extends VehicleService<Auto> {
         details.add("Wheel");
         details.add("Steering wheel");
 
+        Object id = stringObjectMap.getOrDefault("id", "id0");
         Object model = stringObjectMap.getOrDefault("model", "Model0");
         Object type = stringObjectMap.getOrDefault("bodyType", "Type0");
         Object manufacturer = stringObjectMap.getOrDefault("manufacturer", Manufacturer.NON);
@@ -108,7 +112,8 @@ public class AutoService extends VehicleService<Auto> {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-        return new Auto((String) model,
+        return new Auto((String) id,
+                (String) model,
                 Manufacturer.valueOf(manufacturer.toString()),
                 BigDecimal.valueOf(Long.parseLong(price.toString())),
                 (String) type,

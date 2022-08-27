@@ -7,10 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 class SportAutoRepositoryTest {
 
@@ -18,7 +15,7 @@ class SportAutoRepositoryTest {
     private SportAuto sportAuto;
 
     private SportAuto createSimpleSportAuto() {
-        return new SportAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 180, 1);
+        return new SportAuto(UUID.randomUUID().toString(),"Model", Manufacturer.BMW, BigDecimal.ZERO, "Type", 180, 1);
     }
 
     @BeforeEach
@@ -113,18 +110,18 @@ class SportAutoRepositoryTest {
         Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
     }
 
-    @Test
-    void updateByBodyType() {
-        final SportAuto otherAuto = createSimpleSportAuto();
-        otherAuto.setManufacturer(Manufacturer.BMW);
-        otherAuto.setPrice(BigDecimal.TEN);
-
-        final boolean actual = target.updateByBodyType(sportAuto.getBodyType(), otherAuto);
-        Assertions.assertTrue(actual);
-        final Optional<SportAuto> actualAuto = target.findById(sportAuto.getId());
-        Assertions.assertEquals(Manufacturer.BMW, actualAuto.get().getManufacturer());
-        Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
-    }
+//    @Test
+//    void updateByBodyType() {
+//        final SportAuto otherAuto = createSimpleSportAuto();
+//        otherAuto.setManufacturer(Manufacturer.BMW);
+//        otherAuto.setPrice(BigDecimal.TEN);
+//
+//        final boolean actual = target.updateByBodyType(sportAuto.getBodyType(), otherAuto);
+//        Assertions.assertTrue(actual);
+//        final Optional<SportAuto> actualAuto = target.findById(sportAuto.getId());
+//        Assertions.assertEquals(Manufacturer.BMW, actualAuto.get().getManufacturer());
+//        Assertions.assertEquals(BigDecimal.TEN, actualAuto.get().getPrice());
+//    }
 
     @Test
     void deleteSuccess() {

@@ -11,10 +11,14 @@ public class SportAuto extends Vehicle {
 
     private String bodyType;
     private int maxSpeed;
+    private String id;
 
-    public SportAuto(String model, Manufacturer manufacturer, BigDecimal price, String bodyType, int maxSpeed, int count) {
+    public SportAuto(String id, String model, Manufacturer manufacturer,
+                     BigDecimal price, String bodyType, int maxSpeed, int count) {
         super(model, manufacturer, price, count, VehicleType.SPORT_AUTO);
+        this.id = id;
         this.maxSpeed = maxSpeed;
+        this.bodyType = bodyType;
     }
 
     @Override
