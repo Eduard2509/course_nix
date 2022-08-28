@@ -18,7 +18,6 @@ public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
 
     private static BusinessAutoRepository instance;
 
-    @Autowired
     public BusinessAutoRepository() {
         businessAutos = new LinkedList<>();
     }

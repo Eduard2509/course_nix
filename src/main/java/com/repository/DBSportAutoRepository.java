@@ -152,4 +152,11 @@ public class DBSportAutoRepository implements CrudRepository<SportAuto> {
             preparedStatement.execute();
         }
     }
+
+    @SneakyThrows
+    public void clear() {
+        try(final Statement statement = connection.createStatement()) {
+            statement.execute("DELETE FROM public.\"SportAuto\"");
+        }
+    }
 }

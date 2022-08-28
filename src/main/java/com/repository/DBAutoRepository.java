@@ -93,7 +93,6 @@ public class DBAutoRepository implements CrudRepository<Auto> {
             preparedStatement.setBigDecimal(4, auto.getPrice());
             preparedStatement.setString(5, auto.getBodyType());
             preparedStatement.setInt(6, auto.getCount());
-//        preparedStatement.setObject(6, auto.getEngine().getBrand());
             preparedStatement.setString(7, auto.getCurrency());
             preparedStatement.setTimestamp(8, Timestamp.valueOf(auto.getCreated()));
             return preparedStatement.execute();
@@ -120,7 +119,6 @@ public class DBAutoRepository implements CrudRepository<Auto> {
             preparedStatement.setDouble(3, auto.getPrice().doubleValue());
             preparedStatement.setString(4, auto.getBodyType());
             preparedStatement.setInt(5, auto.getCount());
-//        preparedStatement.setObject(6, auto.getEngine());
             preparedStatement.setString(6, auto.getCurrency());
             preparedStatement.setTimestamp(7, Timestamp.valueOf(auto.getCreated()));
             preparedStatement.setString(8, auto.getId());

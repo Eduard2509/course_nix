@@ -1,7 +1,6 @@
 package com.service;
 
 import com.annotations.Autowired;
-import com.config.JDBCConfig;
 import com.model.*;
 import com.repository.DBAutoRepository;
 import com.repository.DBBusinessAutoRepository;
@@ -12,15 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class InvoiceService {
     private static final DBAutoRepository DB_AUTO_REPOSITORY = DBAutoRepository.getInstance();
@@ -47,29 +39,48 @@ public class InvoiceService {
     }
 
     private List<Vehicle> getRandomListVehicle(int count) {
-        List<Vehicle> listVehicle = new ArrayList<Vehicle>();
+        List<Vehicle> listVehicle = new ArrayList<>();
         Random random = new Random();
-        int randomVehicle = random.nextInt(0, 3);
         for (int i = 0; i < count; i++) {
+            int randomVehicle = random.nextInt(0, 3);
             if (randomVehicle == 0) {
-                listVehicle.add(AUTO_SERVICE.creat());
+                Auto creat = AUTO_SERVICE.creat();
+                AUTO_SERVICE.save(creat);
+                listVehicle.add(creat);
             }
             if (randomVehicle == 1) {
-                listVehicle.add(BUSINESS_AUTO_SERVICE.creat());
+                BusinessAuto creat = BUSINESS_AUTO_SERVICE.creat();
+                BUSINESS_AUTO_SERVICE.save(creat);
+                listVehicle.add(creat);
             }
             if (randomVehicle == 2) {
-                listVehicle.add(SPORT_AUTO_SERVICE.creat());
+                SportAuto creat = SPORT_AUTO_SERVICE.creat();
+                SPORT_AUTO_SERVICE.save(creat);
+                listVehicle.add(creat);
+
             }
         }
         return listVehicle;
     }
 
+    @SneakyThrows
+    private BigDecimal getSumInvoice(List<Vehicle> vehicles) {
+        BigDecimal sum = BigDecimal.valueOf(0);
+        for (Vehicle vehicle : vehicles) {
+            BigDecimal price = vehicle.getPrice();
+            sum = sum.add(price);
+        }
+        return sum;
+    }
 
-    public void creatAndSaveRandomInvoice(int countVehicle){
+    public void createAndSaveRandomInvoice(int countVehicle){
+        List<Vehicle> randomListVehicle = getRandomListVehicle(countVehicle);
+        BigDecimal sumInvoice = getSumInvoice(randomListVehicle);
         Invoice invoice = new Invoice(
                 UUID.randomUUID().toString(),
                 LocalDateTime.now(),
-                getRandomListVehicle(countVehicle));
+                randomListVehicle,
+                sumInvoice);
         repository.save(invoice);
         LOGGER.info("Invoice id created: {}", invoice.getId());
     }
@@ -82,6 +93,7 @@ public class InvoiceService {
     }
 
     public void save(Invoice invoice) {
+
         repository.save(invoice);
     }
 
@@ -99,29 +111,30 @@ public class InvoiceService {
         LOGGER.info("Invoice deleted id: {}", id);
     }
 
+    public void printInvoiceMorePrice(BigDecimal limit) {
+        List<Invoice> invoiceMorePrice = repository.getInvoiceMorePrice(limit);
+        for (Invoice invoice : invoiceMorePrice) {
+            System.out.println(invoice);
+        }
+    }
+
     public void findInvoiceById(String id) {
         System.out.println(repository.findById(id));
     }
 
-    private BigDecimal sumInvoice(Invoice invoice) {
-        BigDecimal sum = BigDecimal.valueOf(0);
-        invoice.getVehicles().stream()
-                .map(Vehicle::getPrice)
-                .forEach(sum::add);
-        return sum;
+
+    public void printCountInvoiceInDB(){
+        System.out.println("Count invoices: " + repository.getCountInvoiceInDB());
     }
 
-    @SneakyThrows
-    public List<Invoice> getInvoiceMorePrice(BigDecimal priceLimit) {
-        List<Invoice> invoices = repository.getAll();
-        List<Invoice> result = new ArrayList<>();
-        for (Invoice invoice : invoices) {
-            BigDecimal sumInvoice = sumInvoice(invoice);
-            if (sumInvoice.compareTo(priceLimit) > 0) {
-                result.add(invoice);
-            }
+
+
+    public void updateDateInvoice(String id) {
+        repository.updateDateInvoice(id);
+        LOGGER.info("Invoice date updated id: {}", id);
+    }
+
+    public void groupInvoiceByPrice() {
+        repository.groupInvoiceByPrice();
         }
-        return result;
-    }
-
 }

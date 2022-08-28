@@ -139,4 +139,11 @@ public class DBBusinessAutoRepository implements CrudRepository<BusinessAuto> {
             preparedStatement.execute();
         }
     }
+
+    @SneakyThrows
+    public void clear() {
+        try(final Statement statement = connection.createStatement()) {
+            statement.execute("DELETE FROM public.\"BusinessAuto\"");
+        }
+    }
 }

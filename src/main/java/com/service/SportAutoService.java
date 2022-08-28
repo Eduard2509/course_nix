@@ -4,6 +4,7 @@ import com.annotations.Autowired;
 import com.annotations.Singleton;
 import com.model.Manufacturer;
 import com.model.SportAuto;
+import com.repository.DBSportAutoRepository;
 import com.repository.SportAutoRepository;
 
 import java.math.BigDecimal;
@@ -14,17 +15,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SportAutoService extends VehicleService<SportAuto> {
 
     private static SportAutoService instance;
-    private final SportAutoRepository sportAutoRepository;
+    private final DBSportAutoRepository sportAutoRepository;
 
     @Autowired
-    public SportAutoService(SportAutoRepository repository) {
+    public SportAutoService(DBSportAutoRepository repository) {
         super(repository);
         this.sportAutoRepository = repository;
     }
 
     public static SportAutoService getInstance() {
         if (instance == null) {
-            instance = new SportAutoService(SportAutoRepository.getInstance());
+            instance = new SportAutoService(DBSportAutoRepository.getInstance());
         }
         return instance;
     }

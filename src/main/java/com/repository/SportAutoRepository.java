@@ -16,7 +16,6 @@ public class SportAutoRepository implements CrudRepository<SportAuto> {
     private final List<SportAuto> sportAutos;
     private static SportAutoRepository instance;
 
-    @Autowired
     public SportAutoRepository() {
         sportAutos = new LinkedList<>();
     }

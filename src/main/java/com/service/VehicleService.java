@@ -21,6 +21,10 @@ public abstract class VehicleService<T extends Vehicle> {
         this.repository = repository;
     }
 
+    public void save(T vehicle) {
+        repository.save(vehicle);
+    }
+
     public List<T> createAndSave(int count) {
         List<T> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
