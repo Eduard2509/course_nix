@@ -17,4 +17,6 @@ public interface CrudRepository<O extends Vehicle> {
     boolean update(O auto);
 
     boolean delete(String id);
+
+    void clear();
 }

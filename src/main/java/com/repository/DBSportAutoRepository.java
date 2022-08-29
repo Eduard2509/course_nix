@@ -153,6 +153,7 @@ public class DBSportAutoRepository implements CrudRepository<SportAuto> {
         }
     }
 
+    @Override
     @SneakyThrows
     public void clear() {
         try(final Statement statement = connection.createStatement()) {

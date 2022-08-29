@@ -123,5 +123,6 @@ public class AutoService extends VehicleService<Auto> {
                 (String) currency,
                 LocalDateTime.parse(created.toString(), formatter));
     };
+
 }
 

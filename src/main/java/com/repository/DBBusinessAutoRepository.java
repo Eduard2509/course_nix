@@ -140,6 +140,7 @@ public class DBBusinessAutoRepository implements CrudRepository<BusinessAuto> {
         }
     }
 
+    @Override
     @SneakyThrows
     public void clear() {
         try(final Statement statement = connection.createStatement()) {

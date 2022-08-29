@@ -61,5 +61,4 @@ public class SportAutoService extends VehicleService<SportAuto> {
         return atomicInteger.get();
     }
 
-
 }

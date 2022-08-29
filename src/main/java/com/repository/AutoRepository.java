@@ -101,4 +101,9 @@ public class AutoRepository implements CrudRepository<Auto> {
             to.setPrice(from.getPrice());
         }
     }
+
+    @Override
+    public void clear() {
+        autos.clear();
+    }
 }

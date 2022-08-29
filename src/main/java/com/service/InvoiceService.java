@@ -2,10 +2,7 @@ package com.service;
 
 import com.annotations.Autowired;
 import com.model.*;
-import com.repository.DBAutoRepository;
-import com.repository.DBBusinessAutoRepository;
 import com.repository.DBInvoiceRepository;
-import com.repository.DBSportAutoRepository;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +12,11 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class InvoiceService {
-    private static final DBAutoRepository DB_AUTO_REPOSITORY = DBAutoRepository.getInstance();
-    private static final DBBusinessAutoRepository DB_BUSINESS_AUTO_REPOSITORY = DBBusinessAutoRepository.getInstance();
-    private static final DBSportAutoRepository DB_SPORT_AUTO_REPOSITORY = DBSportAutoRepository.getInstance();
     private static final AutoService AUTO_SERVICE = AutoService.getInstance();
     private static final BusinessAutoService BUSINESS_AUTO_SERVICE = BusinessAutoService.getInstance();
     private static final SportAutoService SPORT_AUTO_SERVICE = SportAutoService.getInstance();
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceService.class);
+
 
     private static InvoiceService instance;
     private static DBInvoiceRepository repository;
@@ -73,7 +68,7 @@ public class InvoiceService {
         return sum;
     }
 
-    public void createAndSaveRandomInvoice(int countVehicle){
+    public void createAndSaveRandomInvoice(int countVehicle) {
         List<Vehicle> randomListVehicle = getRandomListVehicle(countVehicle);
         BigDecimal sumInvoice = getSumInvoice(randomListVehicle);
         Invoice invoice = new Invoice(
@@ -85,7 +80,7 @@ public class InvoiceService {
         LOGGER.info("Invoice id created: {}", invoice.getId());
     }
 
-    public void printAll(){
+    public void printAll() {
         List<Invoice> all = repository.getAll();
         for (Invoice invoice : all) {
             System.out.println(invoice);
@@ -93,7 +88,6 @@ public class InvoiceService {
     }
 
     public void save(Invoice invoice) {
-
         repository.save(invoice);
     }
 
@@ -119,22 +113,30 @@ public class InvoiceService {
     }
 
     public void findInvoiceById(String id) {
-        System.out.println(repository.findById(id));
+        System.out.println(repository.findById(id).get());
     }
 
-
-    public void printCountInvoiceInDB(){
+    public void printCountInvoiceInDB() {
         System.out.println("Count invoices: " + repository.getCountInvoiceInDB());
     }
-
-
 
     public void updateDateInvoice(String id) {
         repository.updateDateInvoice(id);
         LOGGER.info("Invoice date updated id: {}", id);
     }
 
-    public void groupInvoiceByPrice() {
-        repository.groupInvoiceByPrice();
-        }
+    public Map groupInvoiceByPrice() {
+        return repository.groupInvoiceByPrice();
+    }
+
+    public void clear(){
+        repository.clear();
+    }
+
+    public void deleteAll() {
+        AUTO_SERVICE.deleteAll();
+        BUSINESS_AUTO_SERVICE.deleteAll();
+        SPORT_AUTO_SERVICE.deleteAll();
+        clear();
+    }
 }

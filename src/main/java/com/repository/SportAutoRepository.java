@@ -119,4 +119,9 @@ public class SportAutoRepository implements CrudRepository<SportAuto> {
             to.setModel(from.getModel());
         }
     }
+
+    @Override
+    public void clear() {
+        sportAutos.clear();
+    }
 }

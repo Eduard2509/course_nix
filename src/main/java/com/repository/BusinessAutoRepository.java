@@ -101,4 +101,9 @@ public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
             to.setPrice(from.getPrice());
         }
     }
+
+    @Override
+    public void clear() {
+        businessAutos.clear();
+    }
 }

@@ -71,6 +71,10 @@ public abstract class VehicleService<T extends Vehicle> {
         LOGGER.info("Deleted auto {}", id);
     }
 
+    public void deleteAll() {
+        repository.clear();
+    }
+
     public Optional<T> findOneById(String id) {
         return id == null ? repository.findById("") : repository.findById(id);
     }

@@ -141,6 +141,7 @@ public class DBAutoRepository implements CrudRepository<Auto> {
         }
     }
 
+    @Override
     @SneakyThrows
     public void clear() {
         try(final Statement statement = connection.createStatement()) {
