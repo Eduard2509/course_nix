@@ -72,7 +72,6 @@ public class DBBusinessAutoRepository implements CrudRepository<BusinessAuto> {
             preparedStatement.setBigDecimal(4, businessAuto.getPrice());
             preparedStatement.setString(5, businessAuto.getBusinessClassAuto().name());
             preparedStatement.setInt(6, businessAuto.getCount());
-//        preparedStatement.setObject(6, auto.getEngine().getBrand());
             return preparedStatement.execute();
         }
     }

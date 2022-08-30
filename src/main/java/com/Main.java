@@ -12,10 +12,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        JDBCConfig.getConnection();
-//
-
-
         final Action[] actions = Action.values();
         final List<String> names = getNames(actions);
         Command command;

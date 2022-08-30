@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public abstract class Vehicle {
-    protected final String id;
+    protected String id;
     protected String model;
     protected BigDecimal price;
     protected Manufacturer manufacturer;
@@ -18,6 +18,7 @@ public abstract class Vehicle {
     protected LocalDateTime created;
     protected int count;
     protected VehicleType vehicleType;
+
 
     protected Vehicle(String model, Manufacturer manufacturer, BigDecimal price, int count, VehicleType vehicleType) {
         this.id = UUID.randomUUID().toString();
@@ -28,5 +29,8 @@ public abstract class Vehicle {
         this.restyling = UUID.randomUUID().toString();
         this.created = LocalDateTime.now();
         this.vehicleType = vehicleType;
+    }
+
+    protected Vehicle() {
     }
 }

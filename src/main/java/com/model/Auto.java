@@ -1,21 +1,37 @@
 package com.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = false)
+@Entity
 public class Auto extends Vehicle {
     private String bodyType;
+
+    @Transient
     private List<String> details;
+    @Transient
     private Engine engine;
     private String currency;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
+    
+    public Auto(){
+    }
 
     public Auto(String id, String model, Manufacturer manufacturer, BigDecimal price,
                 String bodyType, int count, List<String> details, Engine engine, String currency, LocalDateTime created) {
@@ -45,5 +61,18 @@ public class Auto extends Vehicle {
         sb.append(", vehicleType=").append(vehicleType);
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Auto auto = (Auto) o;
+        return Objects.equals(bodyType, auto.bodyType) && Objects.equals(details, auto.details) && Objects.equals(engine, auto.engine) && Objects.equals(currency, auto.currency) && id.equals(auto.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bodyType, details, engine, currency, id);
     }
 }

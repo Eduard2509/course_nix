@@ -3,6 +3,7 @@ package com.repository;
 import com.config.JDBCConfig;
 import com.model.*;
 import com.service.InvoiceService;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DBInvoiceRepository {
     private static final DBAutoRepository DB_AUTO_REPOSITORY = DBAutoRepository.getInstance();
@@ -32,9 +35,8 @@ public class DBInvoiceRepository {
     }
 
     @SneakyThrows
-    private Set<Auto> mapRowToAuto(ResultSet rs) {
-        Set<Auto> result = new HashSet<>();
-        result.add(new Auto(rs.getString("auto_id"),
+    private Auto mapRowToAuto(ResultSet rs) {
+        return new Auto(rs.getString("auto_id"),
                 rs.getString("model_auto"),
                 Manufacturer.valueOf(rs.getString("manufacturer_auto")),
                 rs.getBigDecimal("price_auto"),
@@ -43,46 +45,41 @@ public class DBInvoiceRepository {
                 null,
                 null,
                 rs.getString("currency_auto"),
-                rs.getTimestamp("created_auto").toLocalDateTime()));
-        return result;
+                rs.getTimestamp("created_auto").toLocalDateTime());
     }
 
     @SneakyThrows
-    private Set<BusinessAuto> mapRowToBusinessAuto(ResultSet rs) {
-        Set<BusinessAuto> result = new HashSet<>();
-        result.add(new BusinessAuto(rs.getString("business_auto_id"),
+    private BusinessAuto mapRowToBusinessAuto(ResultSet rs) {
+        return new BusinessAuto(rs.getString("business_auto_id"),
                 rs.getString("business_auto_model"),
                 Manufacturer.valueOf(rs.getString("business_auto_manufacturer")),
                 rs.getBigDecimal("business_auto_price"),
                 BusinessClassAuto.valueOf(rs.getString("business_class_auto")),
-                rs.getInt("business_auto_count")));
-        return result;
+                rs.getInt("business_auto_count"));
     }
 
     @SneakyThrows
-    private Set<SportAuto> mapRowToSportAuto(ResultSet rs) {
-        Set<SportAuto> result = new HashSet<>();
-        result.add(new SportAuto(rs.getString("sport_auto_id"),
+    private SportAuto mapRowToSportAuto(ResultSet rs) {
+        return new SportAuto(rs.getString("sport_auto_id"),
                 rs.getString("sport_auto_model"),
                 Manufacturer.valueOf(rs.getString("sport_auto_manufacturer")),
                 rs.getBigDecimal("sport_auto_price"),
                 rs.getString("sport_auto_body_type"),
                 rs.getInt("sport_auto_max_speed"),
-                rs.getInt("sport_auto_count")));
-        return result;
+                rs.getInt("sport_auto_count"));
     }
 
     @SneakyThrows
     private List<Vehicle> getVehicleFromInvoice(ResultSet rs) {
         Set<Vehicle> result = new HashSet<>();
         if (rs.getString("auto_id") != null) {
-            result.addAll(mapRowToAuto(rs));
+            result.add(mapRowToAuto(rs));
         }
         if (rs.getString("business_auto_id") != null) {
-            result.addAll(mapRowToBusinessAuto(rs));
+            result.add(mapRowToBusinessAuto(rs));
         }
         if (rs.getString("sport_auto_id") != null) {
-            result.addAll(mapRowToSportAuto(rs));
+            result.add(mapRowToSportAuto(rs));
         }
         return new ArrayList<>(result);
     }
@@ -126,14 +123,28 @@ public class DBInvoiceRepository {
                 " LEFT JOIN \"Auto\" on \"Invoice\".id = \"Auto\".foreign_key " +
                 " LEFT JOIN \"BusinessAuto\" on \"Invoice\".id = \"BusinessAuto\".foreign_key " +
                 " LEFT JOIN \"SportAuto\" on \"Invoice\".id = \"SportAuto\".foreign_key ";
-        List<Invoice> result = new ArrayList<>();
+        Set<Invoice> setInvoices = new HashSet<>();
         try (final Statement statement = connection.createStatement()) {
             final ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                result.add(mapRowToObject(resultSet));
+                Invoice invoice = mapRowToObject(resultSet);
+                if (invoice != null && setInvoices.stream().anyMatch(res -> res.getId().equals(invoice.getId()))) {
+                    List<Vehicle> vehicleFromInvoice = getVehicleFromInvoice(resultSet);
+                    for (Vehicle vehicle : vehicleFromInvoice) {
+                        for (Invoice oldInvoice : setInvoices) {
+                            if (oldInvoice.getId().equals(invoice.getId())) {
+                                if (!(setInvoices.contains(vehicle))) {
+                                    oldInvoice.getVehicles().addAll(vehicleFromInvoice);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    setInvoices.add(invoice);
+                }
             }
-            return result;
         }
+        return new ArrayList<>(setInvoices);
     }
 
     private BigDecimal getSumInvoice(Invoice invoice) {
@@ -271,21 +282,23 @@ public class DBInvoiceRepository {
     @SneakyThrows
     public int getCountInvoiceInDB() {
         String sql = "SELECT COUNT(id) as count FROM public.\"Invoice\"";
-        Statement statement = connection.createStatement();
-        final ResultSet resultSet = statement.executeQuery(sql);
-        if (resultSet.next()) {
-            return resultSet.getInt("count");
+        try (Statement statement = connection.createStatement()) {
+            final ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("count");
+            }
+            return 0;
         }
-        return 0;
     }
 
     @SneakyThrows
     public void updateDateInvoice(String id) {
         String sql = "UPDATE public.\"Invoice\" SET created=? WHERE id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
-        preparedStatement.setString(2, id);
-        preparedStatement.execute();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setString(2, id);
+            preparedStatement.execute();
+        }
     }
 
     @SneakyThrows
@@ -315,22 +328,6 @@ public class DBInvoiceRepository {
         try (final Statement statement = connection.createStatement()) {
             statement.execute("DELETE FROM public.\"Invoice\"");
         }
-    }
-
-    private BigDecimal getSumPriceVehicles(List<Vehicle> vehicles) {
-        BigDecimal sum = BigDecimal.valueOf(0);
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle.getVehicleType().equals(VehicleType.AUTO)) {
-                sum = sum.add(vehicle.getPrice());
-            }
-            if (vehicle.getVehicleType().equals(VehicleType.BUSINESS_AUTO)) {
-                sum = sum.add(vehicle.getPrice());
-            }
-            if (vehicle.getVehicleType().equals(VehicleType.SPORT_AUTO)) {
-                sum = sum.add(vehicle.getPrice());
-            }
-        }
-        return sum;
     }
 
 
@@ -366,7 +363,13 @@ public class DBInvoiceRepository {
             preparedStatement.setBigDecimal(1, priceLimit);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                invoices.add(mapRowToObject(rs));
+                Invoice invoice = mapRowToObject(rs);
+                if (invoices.stream().anyMatch(res -> res.getId().equals(invoice.getId()))) {
+                    List<Vehicle> vehicleFromInvoice = getVehicleFromInvoice(rs);
+                    invoice.getVehicles().addAll(vehicleFromInvoice);
+                } else {
+                    invoices.add(invoice);
+                }
             }
         }
         return invoices;
