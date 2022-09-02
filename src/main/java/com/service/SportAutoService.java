@@ -4,26 +4,28 @@ import com.annotations.Autowired;
 import com.annotations.Singleton;
 import com.model.Manufacturer;
 import com.model.SportAuto;
+import com.repository.DBSportAutoRepository;
 import com.repository.SportAutoRepository;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Singleton
 public class SportAutoService extends VehicleService<SportAuto> {
 
     private static SportAutoService instance;
-    private final SportAutoRepository sportAutoRepository;
+    private final DBSportAutoRepository sportAutoRepository;
 
     @Autowired
-    public SportAutoService(SportAutoRepository repository) {
+    public SportAutoService(DBSportAutoRepository repository) {
         super(repository);
         this.sportAutoRepository = repository;
     }
 
     public static SportAutoService getInstance() {
         if (instance == null) {
-            instance = new SportAutoService(SportAutoRepository.getInstance());
+            instance = new SportAutoService(DBSportAutoRepository.getInstance());
         }
         return instance;
     }
@@ -31,6 +33,7 @@ public class SportAutoService extends VehicleService<SportAuto> {
     @Override
     protected SportAuto creat() {
         return new SportAuto(
+                UUID.randomUUID().toString(),
                 "Model: " + RANDOM.nextInt(200),
                 Manufacturer.BMW,
                 BigDecimal.valueOf(RANDOM.nextDouble(200000.0)),
@@ -56,12 +59,6 @@ public class SportAutoService extends VehicleService<SportAuto> {
                 }
         );
         return atomicInteger.get();
-    }
-
-    public void findSportAutosByBodyType(String bodyType) {
-        sportAutoRepository.findByBodyType(bodyType)
-                .filter(sportAuto -> sportAuto.getBodyType().equals(bodyType))
-                .ifPresent(sportAuto -> repository.update(sportAuto));
     }
 
 }

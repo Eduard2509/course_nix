@@ -16,7 +16,6 @@ public class AutoRepository implements CrudRepository<Auto> {
 
     private static AutoRepository instance;
 
-    @Autowired
     public AutoRepository() {
         autos = new LinkedList<>();
     }
@@ -101,5 +100,10 @@ public class AutoRepository implements CrudRepository<Auto> {
             to.setBodyType(from.getBodyType());
             to.setPrice(from.getPrice());
         }
+    }
+
+    @Override
+    public void clear() {
+        autos.clear();
     }
 }

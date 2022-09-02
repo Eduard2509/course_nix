@@ -10,6 +10,7 @@ public enum Action {
     PRINT("Print vehicles", new Print()),
     READ_FROM_FILE_XML("Read from xml file", new ReadFromFileXml()),
     READ_FROM_FILE_JSON("Read from json file", new ReadFromFileJson()),
+    INVOICE_COMMANDS("Invoice commands", new InvoiceCommand()),
     EXIT("Exit", null);
 
     private String name;

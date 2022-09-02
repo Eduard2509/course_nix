@@ -1,5 +1,7 @@
 package com.command;
 
+import com.model.Auto;
+import com.model.BusinessAuto;
 import com.model.VehicleType;
 import com.service.AutoService;
 import com.service.BusinessAutoService;

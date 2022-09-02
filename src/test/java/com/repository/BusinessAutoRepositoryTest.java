@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 class BusinessAutoRepositoryTest {
 
@@ -18,7 +19,7 @@ class BusinessAutoRepositoryTest {
     private BusinessAuto businessAuto;
 
     private BusinessAuto createSimpleBusinessAuto() {
-        return new BusinessAuto("Model", Manufacturer.BMW, BigDecimal.ZERO, BusinessClassAuto.A, 1);
+        return new BusinessAuto(UUID.randomUUID().toString(), "Model", Manufacturer.BMW, BigDecimal.ZERO, BusinessClassAuto.A, 1);
     }
 
     @BeforeEach

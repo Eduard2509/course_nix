@@ -1,8 +1,8 @@
 package com;
 
-import com.annotations.Reflection;
 import com.command.Action;
 import com.command.Command;
+import com.config.JDBCConfig;
 import com.util.UserInputUtil;
 
 import java.util.ArrayList;
@@ -11,9 +11,6 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-
-        Reflection reflection = new Reflection();
-        reflection.getSingleton();
 
         final Action[] actions = Action.values();
         final List<String> names = getNames(actions);

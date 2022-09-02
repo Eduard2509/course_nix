@@ -1,6 +1,5 @@
 package com.repository;
 
-
 import com.annotations.Autowired;
 import com.annotations.Singleton;
 import com.model.SportAuto;
@@ -12,13 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-
 public class SportAutoRepository implements CrudRepository<SportAuto> {
 
     private final List<SportAuto> sportAutos;
     private static SportAutoRepository instance;
 
-    @Autowired
     public SportAutoRepository() {
         sportAutos = new LinkedList<>();
     }
@@ -121,5 +118,10 @@ public class SportAutoRepository implements CrudRepository<SportAuto> {
             to.setPrice(from.getPrice());
             to.setModel(from.getModel());
         }
+    }
+
+    @Override
+    public void clear() {
+        sportAutos.clear();
     }
 }

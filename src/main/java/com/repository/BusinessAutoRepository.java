@@ -18,7 +18,6 @@ public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
 
     private static BusinessAutoRepository instance;
 
-    @Autowired
     public BusinessAutoRepository() {
         businessAutos = new LinkedList<>();
     }
@@ -101,5 +100,10 @@ public class BusinessAutoRepository implements CrudRepository<BusinessAuto> {
             to.setModel(from.getModel());
             to.setPrice(from.getPrice());
         }
+    }
+
+    @Override
+    public void clear() {
+        businessAutos.clear();
     }
 }

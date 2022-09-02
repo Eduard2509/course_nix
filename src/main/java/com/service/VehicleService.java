@@ -21,6 +21,10 @@ public abstract class VehicleService<T extends Vehicle> {
         this.repository = repository;
     }
 
+    public void save(T vehicle) {
+        repository.save(vehicle);
+    }
+
     public List<T> createAndSave(int count) {
         List<T> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
@@ -60,12 +64,15 @@ public abstract class VehicleService<T extends Vehicle> {
             vehicle1.setPrice(price);
             repository.update(vehicle1);
         });
-
     }
 
     public void delete(String id) {
         repository.delete(id);
         LOGGER.info("Deleted auto {}", id);
+    }
+
+    public void deleteAll() {
+        repository.clear();
     }
 
     public Optional<T> findOneById(String id) {
