@@ -1,5 +1,7 @@
 package com.service;
 
+import com.annotations.Autowired;
+import com.annotations.Singleton;
 import com.model.BusinessAuto;
 import com.model.BusinessClassAuto;
 import com.model.Manufacturer;
@@ -9,12 +11,14 @@ import com.repository.BusinessAutoRepository;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+@Singleton
 public class BusinessAutoService extends VehicleService<BusinessAuto> {
 
     private static BusinessAutoService instance;
 
     private final BusinessAutoRepository businessAutoRepository;
 
+    @Autowired
     public BusinessAutoService(BusinessAutoRepository repository) {
         super(repository);
         this.businessAutoRepository = repository;
