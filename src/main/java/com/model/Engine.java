@@ -4,11 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.UUID;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -21,10 +17,10 @@ public class Engine {
     private double volume;
     private String brand;
 
-    public Engine(){}
+    public Engine() {
+    }
 
     public Engine(double volume, String brand) {
-        this.id = UUID.randomUUID().toString();
         this.volume = volume;
         this.brand = brand;
     }
@@ -37,4 +33,7 @@ public class Engine {
         sb.append('}');
         return sb.toString();
     }
+
+    @OneToOne(mappedBy = "engine")
+    private Auto auto;
 }

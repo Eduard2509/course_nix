@@ -19,7 +19,6 @@ class AutoRepositoryTest {
 
     private Auto createSimpleAuto() {
         Engine engine = new Engine(3.3, "Sport");
-
         List<String> details = new ArrayList<>();
         details.add("door");
         details.add("Wildshield");

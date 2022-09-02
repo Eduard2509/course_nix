@@ -1,24 +1,20 @@
 package com.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = false)
 @Entity
 public class BusinessAuto extends Vehicle {
 
+    @Enumerated(EnumType.STRING)
     private BusinessClassAuto businessClassAuto;
 
     @Id
@@ -26,8 +22,8 @@ public class BusinessAuto extends Vehicle {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
-
-    public BusinessAuto(){}
+    public BusinessAuto() {
+    }
 
     public BusinessAuto(String id,
                         String model,
