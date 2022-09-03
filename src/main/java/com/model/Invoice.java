@@ -1,6 +1,5 @@
 package com.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -8,25 +7,28 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 public class Invoice {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
     private LocalDateTime created;
-    @Transient
-    private List<Vehicle> vehicles;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Vehicle> vehicles;
     private BigDecimal price;
 
-    public Invoice(){}
+    public Invoice() {
+    }
 
-    public Invoice(String id, LocalDateTime created, List<Vehicle> vehicles, BigDecimal price) {
+    public Invoice(String id, LocalDateTime created, Set<Vehicle> vehicles, BigDecimal price) {
         this.id = id;
         this.created = created;
         this.vehicles = vehicles;

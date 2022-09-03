@@ -1,6 +1,5 @@
 package com.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -10,27 +9,27 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = false)
 @Entity
 public class Auto extends Vehicle {
     private String bodyType;
 
     @Transient
     private List<String> details;
-    @Transient
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "engine_ID")
     private Engine engine;
     private String currency;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
-    
-    public Auto(){
+
+    public Auto() {
     }
 
     public Auto(String id, String model, Manufacturer manufacturer, BigDecimal price,

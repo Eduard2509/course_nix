@@ -2,7 +2,6 @@ package com;
 
 import com.command.Action;
 import com.command.Command;
-import com.config.JDBCConfig;
 import com.util.UserInputUtil;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-
         final Action[] actions = Action.values();
         final List<String> names = getNames(actions);
         Command command;

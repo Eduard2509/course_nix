@@ -2,7 +2,7 @@ package com.service;
 
 import com.annotations.Autowired;
 import com.model.*;
-import com.repository.DBInvoiceRepository;
+import com.repository.HibernateInvoiceRepository;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,22 +19,22 @@ public class InvoiceService {
 
 
     private static InvoiceService instance;
-    private static DBInvoiceRepository repository;
+    private static HibernateInvoiceRepository repository;
 
     @Autowired
-    public InvoiceService(DBInvoiceRepository repository) {
+    public InvoiceService(HibernateInvoiceRepository repository) {
         this.repository = repository;
     }
 
     public static InvoiceService getInstance() {
         if (instance == null) {
-            instance = new InvoiceService(DBInvoiceRepository.getInstance());
+            instance = new InvoiceService(HibernateInvoiceRepository.getInstance());
         }
         return instance;
     }
 
-    private List<Vehicle> getRandomListVehicle(int count) {
-        List<Vehicle> listVehicle = new ArrayList<>();
+    private Set<Vehicle> getRandomListVehicle(int count) {
+        Set<Vehicle> listVehicle = new LinkedHashSet<>();
         Random random = new Random();
         for (int i = 0; i < count; i++) {
             int randomVehicle = random.nextInt(0, 3);
@@ -59,7 +59,7 @@ public class InvoiceService {
     }
 
     @SneakyThrows
-    private BigDecimal getSumInvoice(List<Vehicle> vehicles) {
+    private BigDecimal getSumInvoice(Set<Vehicle> vehicles) {
         BigDecimal sum = BigDecimal.valueOf(0);
         for (Vehicle vehicle : vehicles) {
             BigDecimal price = vehicle.getPrice();
@@ -69,19 +69,20 @@ public class InvoiceService {
     }
 
     public void createAndSaveRandomInvoice(int countVehicle) {
-        List<Vehicle> randomListVehicle = getRandomListVehicle(countVehicle);
+        Set<Vehicle> randomListVehicle = getRandomListVehicle(countVehicle);
         BigDecimal sumInvoice = getSumInvoice(randomListVehicle);
         Invoice invoice = new Invoice(
                 UUID.randomUUID().toString(),
                 LocalDateTime.now(),
                 randomListVehicle,
                 sumInvoice);
+        randomListVehicle.forEach(vehicle -> vehicle.setInvoice(invoice));
         repository.save(invoice);
         LOGGER.info("Invoice id created: {}", invoice.getId());
     }
 
     public void printAll() {
-        List<Invoice> all = repository.getAll();
+        Set<Invoice> all = repository.getAll();
         for (Invoice invoice : all) {
             System.out.println(invoice);
         }
@@ -129,7 +130,7 @@ public class InvoiceService {
         return repository.groupInvoiceByPrice();
     }
 
-    public void clear(){
+    public void clear() {
         repository.clear();
     }
 

@@ -5,9 +5,8 @@ import com.annotations.Singleton;
 import com.model.Auto;
 import com.model.Engine;
 import com.model.Manufacturer;
-import com.repository.AutoRepository;
 import com.repository.CrudRepository;
-import com.repository.DBAutoRepository;
+import com.repository.HibernateAutoRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,7 +30,7 @@ public class AutoService extends VehicleService<Auto> {
 
     public static AutoService getInstance() {
         if (instance == null) {
-            instance = new AutoService(DBAutoRepository.getInstance());
+            instance = new AutoService(HibernateAutoRepository.getInstance());
         }
         return instance;
     }
@@ -44,12 +43,13 @@ public class AutoService extends VehicleService<Auto> {
         details.add("Wildshield");
         details.add("Wheel");
         details.add("steering wheel");
-        return new Auto(UUID.randomUUID().toString(),
+        Auto auto = new Auto(UUID.randomUUID().toString(),
                 "Model-" + RANDOM.nextInt(1000),
                 getRandomManufacturer(),
                 BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
                 "Model-" + RANDOM.nextInt(1000),
                 1, details, engine, "$", LocalDateTime.now());
+        return auto;
     }
 
     public void findAutoPrice(String id) {

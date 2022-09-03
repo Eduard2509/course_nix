@@ -3,7 +3,6 @@ package com.repository;
 import com.config.JDBCConfig;
 import com.model.*;
 import com.service.InvoiceService;
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +11,6 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DBInvoiceRepository {
     private static final DBAutoRepository DB_AUTO_REPOSITORY = DBAutoRepository.getInstance();
@@ -70,7 +67,7 @@ public class DBInvoiceRepository {
     }
 
     @SneakyThrows
-    private List<Vehicle> getVehicleFromInvoice(ResultSet rs) {
+    private Set<Vehicle> getVehicleFromInvoice(ResultSet rs) {
         Set<Vehicle> result = new HashSet<>();
         if (rs.getString("auto_id") != null) {
             result.add(mapRowToAuto(rs));
@@ -81,7 +78,7 @@ public class DBInvoiceRepository {
         if (rs.getString("sport_auto_id") != null) {
             result.add(mapRowToSportAuto(rs));
         }
-        return new ArrayList<>(result);
+        return result;
     }
 
     @SneakyThrows
@@ -129,7 +126,7 @@ public class DBInvoiceRepository {
             while (resultSet.next()) {
                 Invoice invoice = mapRowToObject(resultSet);
                 if (invoice != null && setInvoices.stream().anyMatch(res -> res.getId().equals(invoice.getId()))) {
-                    List<Vehicle> vehicleFromInvoice = getVehicleFromInvoice(resultSet);
+                    Set<Vehicle> vehicleFromInvoice = getVehicleFromInvoice(resultSet);
                     for (Vehicle vehicle : vehicleFromInvoice) {
                         for (Invoice oldInvoice : setInvoices) {
                             if (oldInvoice.getId().equals(invoice.getId())) {
@@ -149,7 +146,7 @@ public class DBInvoiceRepository {
 
     private BigDecimal getSumInvoice(Invoice invoice) {
         BigDecimal sum = BigDecimal.valueOf(0);
-        List<Vehicle> vehicles = invoice.getVehicles();
+        Set<Vehicle> vehicles = invoice.getVehicles();
         for (Vehicle vehicle : vehicles) {
             if (vehicle.getVehicleType().equals(VehicleType.AUTO)) {
                 sum = sum.add(vehicle.getPrice());
@@ -302,7 +299,7 @@ public class DBInvoiceRepository {
     }
 
     @SneakyThrows
-    public Map groupInvoiceByPrice() {
+    public Map<BigDecimal, Integer> groupInvoiceByPrice() {
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(
                      "SELECT price, count(*) FROM public.\"Invoice\" GROUP BY price ")) {
@@ -365,7 +362,7 @@ public class DBInvoiceRepository {
             while (rs.next()) {
                 Invoice invoice = mapRowToObject(rs);
                 if (invoices.stream().anyMatch(res -> res.getId().equals(invoice.getId()))) {
-                    List<Vehicle> vehicleFromInvoice = getVehicleFromInvoice(rs);
+                    Set<Vehicle> vehicleFromInvoice = getVehicleFromInvoice(rs);
                     invoice.getVehicles().addAll(vehicleFromInvoice);
                 } else {
                     invoices.add(invoice);
