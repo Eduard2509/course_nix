@@ -22,7 +22,7 @@ public class Invoice {
     private LocalDateTime created;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Vehicle> vehicles;
+    private transient Set<Vehicle> vehicles;
     private BigDecimal price;
 
     public Invoice() {

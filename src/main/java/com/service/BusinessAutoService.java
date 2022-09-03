@@ -7,6 +7,7 @@ import com.model.BusinessClassAuto;
 import com.model.Manufacturer;
 import com.model.Vehicle;
 import com.repository.HibernateBusinessAutoRepository;
+import com.repository.MongoBusinessAutoRepository;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -16,17 +17,17 @@ public class BusinessAutoService extends VehicleService<BusinessAuto> {
 
     private static BusinessAutoService instance;
 
-    private final HibernateBusinessAutoRepository businessAutoRepository;
+    private final MongoBusinessAutoRepository businessAutoRepository;
 
     @Autowired
-    public BusinessAutoService(HibernateBusinessAutoRepository repository) {
+    public BusinessAutoService(MongoBusinessAutoRepository repository) {
         super(repository);
         this.businessAutoRepository = repository;
     }
 
     public static BusinessAutoService getInstance() {
         if (instance == null) {
-            instance = new BusinessAutoService(HibernateBusinessAutoRepository.getInstance());
+            instance = new BusinessAutoService(MongoBusinessAutoRepository.getInstance());
         }
         return instance;
     }

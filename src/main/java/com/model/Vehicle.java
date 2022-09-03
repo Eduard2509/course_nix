@@ -14,7 +14,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Vehicle {
     @Id
-    protected String id;
+    protected transient String id;
     protected String model;
     protected BigDecimal price;
     @Enumerated(EnumType.STRING)
@@ -22,6 +22,7 @@ public abstract class Vehicle {
     protected String restyling;
     protected LocalDateTime created;
     protected int count;
+    protected String invoiceId;
     @Enumerated(EnumType.STRING)
     protected VehicleType vehicleType;
 

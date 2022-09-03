@@ -1,5 +1,7 @@
 package com.command;
 
+import com.config.MongoConfig;
+import com.mongodb.client.MongoDatabase;
 import com.service.InvoiceService;
 
 import java.math.BigDecimal;
@@ -11,6 +13,9 @@ public class InvoiceCommand implements Command {
 
     @Override
     public void execute() {
+        MongoConfig mongoConfig = new MongoConfig();
+        MongoDatabase database = mongoConfig.connect("course_nix");
+        database.drop();
         System.out.println("----------Create and save Invoice---------");
         System.out.println("Please enter count Vehicle, which must be in Invoice: ");
         int count = Integer.parseInt(SCANNER.nextLine());
@@ -31,11 +36,11 @@ public class InvoiceCommand implements Command {
         String idInvoiceDelete = SCANNER.nextLine();
         INVOICE_SERVICE.deleteInvoiceById(idInvoiceDelete);
         System.out.println();
-        System.out.println("----------Update date invoice----------");
-        System.out.println("Enter id invoice, which you want update date: ");
-        String idInvoiceUpdate = SCANNER.nextLine();
-        INVOICE_SERVICE.updateDateInvoice(idInvoiceUpdate);
-        System.out.println();
+//        System.out.println("----------Update date invoice----------");
+//        System.out.println("Enter id invoice, which you want update date: ");
+//        String idInvoiceUpdate = SCANNER.nextLine();
+//        INVOICE_SERVICE.updateDateInvoice(idInvoiceUpdate);
+//        System.out.println();
         System.out.println("---------Count invoices---------");
         INVOICE_SERVICE.printCountInvoiceInDB();
         System.out.println();
@@ -44,8 +49,8 @@ public class InvoiceCommand implements Command {
         int limit = Integer.parseInt(SCANNER.nextLine());
         INVOICE_SERVICE.printInvoiceMorePrice(BigDecimal.valueOf(limit));
         System.out.println();
-        System.out.println("-----------Group by price-----------");
-        System.out.println(INVOICE_SERVICE.groupInvoiceByPrice());
+//        System.out.println("-----------Group by price-----------");
+//        System.out.println(INVOICE_SERVICE.groupInvoiceByPrice());
 
     }
 }
