@@ -36,11 +36,11 @@ public class InvoiceCommand implements Command {
         String idInvoiceDelete = SCANNER.nextLine();
         INVOICE_SERVICE.deleteInvoiceById(idInvoiceDelete);
         System.out.println();
-//        System.out.println("----------Update date invoice----------");
-//        System.out.println("Enter id invoice, which you want update date: ");
-//        String idInvoiceUpdate = SCANNER.nextLine();
-//        INVOICE_SERVICE.updateDateInvoice(idInvoiceUpdate);
-//        System.out.println();
+        System.out.println("----------Update date invoice----------");
+        System.out.println("Enter id invoice, which you want update date: ");
+        String idInvoiceUpdate = SCANNER.nextLine();
+        INVOICE_SERVICE.updateDateInvoice(idInvoiceUpdate);
+        System.out.println();
         System.out.println("---------Count invoices---------");
         INVOICE_SERVICE.printCountInvoiceInDB();
         System.out.println();
@@ -49,8 +49,8 @@ public class InvoiceCommand implements Command {
         int limit = Integer.parseInt(SCANNER.nextLine());
         INVOICE_SERVICE.printInvoiceMorePrice(BigDecimal.valueOf(limit));
         System.out.println();
-//        System.out.println("-----------Group by price-----------");
-//        System.out.println(INVOICE_SERVICE.groupInvoiceByPrice());
+        System.out.println("-----------Group by price-----------");
+        System.out.println(INVOICE_SERVICE.groupInvoiceByPrice());
 
     }
 }

@@ -4,9 +4,10 @@ import com.config.HibernateFactoryUtil;
 import com.config.MongoConfig;
 import com.google.gson.*;
 import com.model.*;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Sorts;
 import lombok.SneakyThrows;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -21,6 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.mongodb.client.model.Aggregates.group;
+import static com.mongodb.client.model.Aggregates.sort;
 import static com.mongodb.client.model.Filters.gt;
 
 public class MongoInvoiceRepository {
@@ -28,19 +31,20 @@ public class MongoInvoiceRepository {
     MongoConfig mongoConfig = new MongoConfig();
     MongoDatabase database = mongoConfig.connect("course_nix");
     private static MongoInvoiceRepository instance;
-    static Gson gson = getGson();
 
     private static Gson getGson() {
         JsonSerializer<LocalDateTime> ser = (localDateTime, type, jsonSerializationContext) ->
-                localDateTime == null ? null : new JsonPrimitive(localDateTime.toString());
-        JsonDeserializer<LocalDateTime> deser = (json, typeOfT, context) -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.S");
-            return LocalDateTime.now();
-        };
+                localDateTime == null ? null : new JsonPrimitive(localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+        JsonDeserializer<LocalDateTime> deser = (json, typeOfT, jsonDeserializationContext) ->
+            LocalDateTime.parse(json.getAsString() + " 00:00",
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withLocale(Locale.ENGLISH));
+
         return new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, ser)
                 .registerTypeAdapter(LocalDateTime.class, deser).create();
     }
+
 
     public static MongoInvoiceRepository getInstance() {
         if (instance == null) {
@@ -50,13 +54,14 @@ public class MongoInvoiceRepository {
     }
 
     private static Document mapperFrom(Invoice invoice) {
+        Gson gson = getGson();
         Document parse = Document.parse(gson.toJson(invoice));
         return parse;
     }
 
     private static Invoice mapperTo(Document document) {
+        Gson gson = getGson();
         return gson.fromJson(document.toJson(), Invoice.class);
-
     }
 
     public Optional<Invoice> findById(String id) {
@@ -199,17 +204,17 @@ public class MongoInvoiceRepository {
 
     @SneakyThrows
     public Map groupInvoiceByPrice() {
-        SessionFactory sessionFactory = HibernateFactoryUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("select i.price, count (i.price) " +
-                "from Invoice i group by i.price");
-        List<Object[]> list = query.getResultList();
-        Map<Object, Integer> groupedPrices = new HashMap<>();
-        list.forEach(item -> groupedPrices.put(item[0], Integer.valueOf(item[1].toString())));
-        transaction.commit();
-        session.close();
-        return groupedPrices;
+        Map<BigDecimal, Integer> prices = new HashMap<>();
+        MongoCollection<Document> invoice = database.getCollection("Invoice");
+        AggregateIterable<Document> aggregate = invoice.aggregate(Arrays.asList(
+                group("$price", Accumulators.sum("count", 1)),
+                sort(Sorts.descending("count"))));
+        MongoCursor<Document> iterator = aggregate.iterator();
+        while (iterator.hasNext()) {
+            Document iter = iterator.next();
+            prices.put(BigDecimal.valueOf(iter.get("_id", Double.class)), (Integer) iter.get("count"));
+        }
+        return prices;
     }
 
     @SneakyThrows
