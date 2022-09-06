@@ -16,17 +16,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SportAutoService extends VehicleService<SportAuto> {
 
     private static SportAutoService instance;
-    private final MongoSportAutoRepository sportAutoRepository;
+    private final HibernateSportAutoRepository sportAutoRepository;
 
     @Autowired
-    public SportAutoService(MongoSportAutoRepository repository) {
+    public SportAutoService(HibernateSportAutoRepository repository) {
         super(repository);
         this.sportAutoRepository = repository;
     }
 
     public static SportAutoService getInstance() {
         if (instance == null) {
-            instance = new SportAutoService(MongoSportAutoRepository.getInstance());
+            instance = new SportAutoService(HibernateSportAutoRepository.getInstance());
         }
         return instance;
     }

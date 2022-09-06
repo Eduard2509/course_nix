@@ -20,16 +20,16 @@ public class InvoiceService {
 
 
     private static InvoiceService instance;
-    private static MongoInvoiceRepository repository;
+    private static HibernateInvoiceRepository repository;
 
     @Autowired
-    public InvoiceService(MongoInvoiceRepository repository) {
+    public InvoiceService(HibernateInvoiceRepository repository) {
         this.repository = repository;
     }
 
     public static InvoiceService getInstance() {
         if (instance == null) {
-            instance = new InvoiceService(MongoInvoiceRepository.getInstance());
+            instance = new InvoiceService(HibernateInvoiceRepository.getInstance());
         }
         return instance;
     }
@@ -77,7 +77,7 @@ public class InvoiceService {
                 LocalDateTime.now(),
                 randomListVehicle,
                 sumInvoice);
-//        randomListVehicle.forEach(vehicle -> vehicle.setInvoice(invoice));
+        randomListVehicle.forEach(vehicle -> vehicle.setInvoice(invoice));
         repository.save(invoice);
         LOGGER.info("Invoice id created: {}", invoice.getId());
     }

@@ -13,9 +13,6 @@ public class InvoiceCommand implements Command {
 
     @Override
     public void execute() {
-        MongoConfig mongoConfig = new MongoConfig();
-        MongoDatabase database = mongoConfig.connect("course_nix");
-        database.drop();
         System.out.println("----------Create and save Invoice---------");
         System.out.println("Please enter count Vehicle, which must be in Invoice: ");
         int count = Integer.parseInt(SCANNER.nextLine());
