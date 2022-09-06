@@ -3,6 +3,7 @@ package com.command;
 import com.config.MongoConfig;
 import com.mongodb.client.MongoDatabase;
 import com.service.InvoiceService;
+import org.flywaydb.core.Flyway;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -49,5 +50,11 @@ public class InvoiceCommand implements Command {
         System.out.println("-----------Group by price-----------");
         System.out.println(INVOICE_SERVICE.groupInvoiceByPrice());
 
+        Flyway flyway = Flyway.configure()
+                .dataSource( "jdbc:postgresql://ec2-44-207-133-100.compute-1.amazonaws.com/d9fblvo32d3uuj" , "xallqvkrezbfkh" , "2afb9e7ebdb2c2ddaada878ee6e6db773497e8fda4096a6dd71e59e19c4cb1b1" )
+                .baselineOnMigrate(true)
+                .locations("db/migration")
+                .load();
+        flyway.migrate();
     }
 }
