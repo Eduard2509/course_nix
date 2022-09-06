@@ -9,7 +9,7 @@
         <property name="hibernate.connection.username">xallqvkrezbfkh</property>
         <property name="hibernate.connection.password">2afb9e7ebdb2c2ddaada878ee6e6db773497e8fda4096a6dd71e59e19c4cb1b1</property>
         <property name="hibernate.connection.url">jdbc:postgresql://ec2-44-207-133-100.compute-1.amazonaws.com/d9fblvo32d3uuj</property>
-        <property name="hibernate.hbm2ddl.auto">validate</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
         <mapping class="com.model.Invoice"/>
         <mapping class="com.model.Auto"/>
