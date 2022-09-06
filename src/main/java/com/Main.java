@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         Flyway flyway = Flyway.configure()
-                .dataSource( "postgres://xallqvkrezbfkh:2afb9e7ebdb2c2ddaada878ee6e6db773497e8fda4096a6dd71e59e19c4cb1b1@ec2-44-207-133-100.compute-1.amazonaws.com:5432/d9fblvo32d3uuj" , "xallqvkrezbfkh" , "2afb9e7ebdb2c2ddaada878ee6e6db773497e8fda4096a6dd71e59e19c4cb1b1" )
+                .dataSource( "postgres://ec2-44-207-133-100.compute-1.amazonaws.com/d9fblvo32d3uuj" , "xallqvkrezbfkh" , "2afb9e7ebdb2c2ddaada878ee6e6db773497e8fda4096a6dd71e59e19c4cb1b1" )
                 .baselineOnMigrate(true)
                 .locations("db/migration")
                 .load();
