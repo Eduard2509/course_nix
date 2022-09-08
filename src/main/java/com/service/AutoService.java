@@ -7,6 +7,7 @@ import com.model.Engine;
 import com.model.Manufacturer;
 import com.repository.CrudRepository;
 import com.repository.HibernateAutoRepository;
+import com.repository.MongoAutoRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ public class AutoService extends VehicleService<Auto> {
 
     public static AutoService getInstance() {
         if (instance == null) {
-            instance = new AutoService(HibernateAutoRepository.getInstance());
+            instance = new AutoService(MongoAutoRepository.getInstance());
         }
         return instance;
     }

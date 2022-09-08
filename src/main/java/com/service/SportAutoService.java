@@ -2,9 +2,11 @@ package com.service;
 
 import com.annotations.Autowired;
 import com.annotations.Singleton;
+import com.model.BusinessAuto;
 import com.model.Manufacturer;
 import com.model.SportAuto;
 import com.repository.HibernateSportAutoRepository;
+import com.repository.MongoSportAutoRepository;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -14,17 +16,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SportAutoService extends VehicleService<SportAuto> {
 
     private static SportAutoService instance;
-    private final HibernateSportAutoRepository sportAutoRepository;
+    private final MongoSportAutoRepository sportAutoRepository;
 
     @Autowired
-    public SportAutoService(HibernateSportAutoRepository repository) {
+    public SportAutoService(MongoSportAutoRepository repository) {
         super(repository);
         this.sportAutoRepository = repository;
     }
 
     public static SportAutoService getInstance() {
         if (instance == null) {
-            instance = new SportAutoService(HibernateSportAutoRepository.getInstance());
+            instance = new SportAutoService(MongoSportAutoRepository.getInstance());
         }
         return instance;
     }
@@ -46,9 +48,9 @@ public class SportAutoService extends VehicleService<SportAuto> {
     }
 
 
-    public int findSportAuto(String id) {
+    public int findSportAutoPrice(String id) {
         AtomicInteger atomicInteger = new AtomicInteger();
-        repository.findById(id).ifPresentOrElse(
+        sportAutoRepository.findById(id).ifPresentOrElse(
                 sportAuto -> {
                     atomicInteger.set(sportAuto.getMaxSpeed());
                 },
@@ -59,4 +61,7 @@ public class SportAutoService extends VehicleService<SportAuto> {
         return atomicInteger.get();
     }
 
+    public SportAuto findSportAuto(String id) {
+        return sportAutoRepository.findById(id).get();
+    }
 }

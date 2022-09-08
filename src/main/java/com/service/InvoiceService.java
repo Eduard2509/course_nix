@@ -3,6 +3,7 @@ package com.service;
 import com.annotations.Autowired;
 import com.model.*;
 import com.repository.HibernateInvoiceRepository;
+import com.repository.MongoInvoiceRepository;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,16 +20,16 @@ public class InvoiceService {
 
 
     private static InvoiceService instance;
-    private static HibernateInvoiceRepository repository;
+    private static MongoInvoiceRepository repository;
 
     @Autowired
-    public InvoiceService(HibernateInvoiceRepository repository) {
+    public InvoiceService(MongoInvoiceRepository repository) {
         this.repository = repository;
     }
 
     public static InvoiceService getInstance() {
         if (instance == null) {
-            instance = new InvoiceService(HibernateInvoiceRepository.getInstance());
+            instance = new InvoiceService(MongoInvoiceRepository.getInstance());
         }
         return instance;
     }
@@ -76,7 +77,7 @@ public class InvoiceService {
                 LocalDateTime.now(),
                 randomListVehicle,
                 sumInvoice);
-        randomListVehicle.forEach(vehicle -> vehicle.setInvoice(invoice));
+//        randomListVehicle.forEach(vehicle -> vehicle.setInvoice(invoice));
         repository.save(invoice);
         LOGGER.info("Invoice id created: {}", invoice.getId());
     }
@@ -130,14 +131,4 @@ public class InvoiceService {
         return repository.groupInvoiceByPrice();
     }
 
-    public void clear() {
-        repository.clear();
-    }
-
-    public void deleteAll() {
-        AUTO_SERVICE.deleteAll();
-        BUSINESS_AUTO_SERVICE.deleteAll();
-        SPORT_AUTO_SERVICE.deleteAll();
-        clear();
-    }
 }
