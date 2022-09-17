@@ -3,6 +3,7 @@ package com.command;
 import com.config.MongoConfig;
 import com.mongodb.client.MongoDatabase;
 import com.service.InvoiceService;
+import org.flywaydb.core.Flyway;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -13,9 +14,6 @@ public class InvoiceCommand implements Command {
 
     @Override
     public void execute() {
-        MongoConfig mongoConfig = new MongoConfig();
-        MongoDatabase database = mongoConfig.connect("course_nix");
-        database.drop();
         System.out.println("----------Create and save Invoice---------");
         System.out.println("Please enter count Vehicle, which must be in Invoice: ");
         int count = Integer.parseInt(SCANNER.nextLine());
@@ -23,6 +21,12 @@ public class InvoiceCommand implements Command {
         INVOICE_SERVICE.createAndSaveRandomInvoice(count);
         INVOICE_SERVICE.createAndSaveRandomInvoice(count);
         System.out.println();
+        Flyway flyway = Flyway.configure()
+                .dataSource( "jdbc:postgresql://ec2-44-207-133-100.compute-1.amazonaws.com/d9fblvo32d3uuj" , "xallqvkrezbfkh" , "2afb9e7ebdb2c2ddaada878ee6e6db773497e8fda4096a6dd71e59e19c4cb1b1" )
+                .baselineOnMigrate(true)
+                .locations("db/migration")
+                .load();
+        flyway.migrate();
         System.out.println("---------Find by id--------");
         System.out.println("Enter id invoice, which you want find: ");
         String idInvoice = SCANNER.nextLine();

@@ -1,0 +1,2 @@
+insert into "auto" (id, model, manufacturer,price, bodyType, count, currency, created)
+values ('a9f569e5-d60a-4d2e-a760-2574a5eb30en','Model-610','OPEL',800,'Model-829',1,'$','2022-09-05 19:09:48.759387')

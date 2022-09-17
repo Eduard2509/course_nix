@@ -17,17 +17,17 @@ public class BusinessAutoService extends VehicleService<BusinessAuto> {
 
     private static BusinessAutoService instance;
 
-    private final MongoBusinessAutoRepository businessAutoRepository;
+    private final HibernateBusinessAutoRepository businessAutoRepository;
 
     @Autowired
-    public BusinessAutoService(MongoBusinessAutoRepository repository) {
+    public BusinessAutoService(HibernateBusinessAutoRepository repository) {
         super(repository);
         this.businessAutoRepository = repository;
     }
 
     public static BusinessAutoService getInstance() {
         if (instance == null) {
-            instance = new BusinessAutoService(MongoBusinessAutoRepository.getInstance());
+            instance = new BusinessAutoService(HibernateBusinessAutoRepository.getInstance());
         }
         return instance;
     }

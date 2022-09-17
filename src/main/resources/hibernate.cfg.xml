@@ -6,10 +6,10 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.username">postgres</property>
-        <property name="hibernate.connection.password">root</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/course_nix</property>
-        <property name="hibernate.hbm2ddl.auto">create-drop</property>
+        <property name="hibernate.connection.username">xallqvkrezbfkh</property>
+        <property name="hibernate.connection.password">2afb9e7ebdb2c2ddaada878ee6e6db773497e8fda4096a6dd71e59e19c4cb1b1</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://ec2-44-207-133-100.compute-1.amazonaws.com/d9fblvo32d3uuj</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
         <mapping class="com.model.Invoice"/>
         <mapping class="com.model.Auto"/>
