@@ -113,7 +113,6 @@ public class HibernateInvoiceRepository {
         }
     }
 
-
     @SneakyThrows
     public Optional<Invoice> findById(String id) {
         final SessionFactory sessionFactory = HibernateFactoryUtil.getSessionFactory();
